@@ -1,5 +1,4 @@
 from django.core.management import BaseCommand
-
 from services.factories import ServiceFactory
 
 
@@ -17,6 +16,7 @@ class Command(BaseCommand):
             service = ServiceFactory.create()
             self.stdout.write(
                 f"Create #{num} service:\n"
-                f"pk={service.pk} name={service.name} price={service.cost} description:\n{service.description}\n"
+                f"pk={service.pk} name={service.name}"
+                f" price={service.cost} description:\n{service.description}\n"
             )
             service.save()

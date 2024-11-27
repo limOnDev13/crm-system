@@ -1,11 +1,11 @@
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-)
 from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from .models import Service
 
@@ -27,10 +27,7 @@ class ServiceUpdateView(UpdateView):
     fields = "name", "description", "cost"
 
     def get_success_url(self):
-        return reverse(
-            "services:service_detail",
-            kwargs={"pk": self.object.pk}
-        )
+        return reverse("services:service_detail", kwargs={"pk": self.object.pk})
 
 
 class ServiceDeleteView(DeleteView):

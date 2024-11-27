@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.urls import reverse
 from factory.faker import Faker
 
-from .models import Service
 from .factories import ServiceFactory
+from .models import Service
 
 
 class ServicesListViewTest(TestCase):
@@ -19,7 +19,7 @@ class ServicesListViewTest(TestCase):
         self.assertQuerySetEqual(
             qs=Service.objects.order_by("pk").all(),
             values=(s.pk for s in response.context["products"]),
-            transform=lambda p: p.pk
+            transform=lambda p: p.pk,
         )
 
 
@@ -31,10 +31,9 @@ class ServicesDetailViewTest(TestCase):
         self.service.delete()
 
     def test_get_service(self):
-        response = self.client.get(reverse(
-            "services:service_detail",
-            kwargs={"pk": self.service.pk}
-        ))
+        response = self.client.get(
+            reverse("services:service_detail", kwargs={"pk": self.service.pk})
+        )
 
         self.assertEqual(response.status_code, 200)
 
@@ -61,9 +60,7 @@ class ServicesCreateViewTest(TestCase):
         )
 
         self.assertRedirects(response, reverse("services:services_list"))
-        self.assertTrue(
-            Service.objects.filter(name=self.service_name).exists()
-        )
+        self.assertTrue(Service.objects.filter(name=self.service_name).exists())
         self.service = Service.objects.filter(name=self.service_name).first()
 
 
@@ -95,7 +92,8 @@ class ServiceUpdateViewTest(TestCase):
             reverse(
                 "services:service_detail",
                 kwargs={"pk": self.service.pk},
-            ))
+            ),
+        )
         # Check that the old primary key contains updated data
         service_ = Service.objects.filter(pk=self.service.pk).first()
         self.assertEqual(service_.name, updated_service.name)
@@ -119,10 +117,7 @@ class ServiceDeleteViewTest(TestCase):
         )
 
         # Check redirect
-        self.assertRedirects(
-            response,
-            reverse("services:services_list")
-        )
+        self.assertRedirects(response, reverse("services:services_list"))
         # Check that there is no data for the old primary key
         not_existing_service = Service.objects.filter(pk=self.service.pk).first()
         self.assertIsNone(not_existing_service)

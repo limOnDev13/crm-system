@@ -1,6 +1,5 @@
-import factory.fuzzy
 import factory.faker
-
+import factory.fuzzy
 from services.models import Service
 
 
