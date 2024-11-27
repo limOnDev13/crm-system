@@ -1,11 +1,12 @@
-from string import ascii_letters
 import random
 
 from django.test import TestCase
 from django.urls import reverse
 from factory.faker import Faker
+from factory.fuzzy import FuzzyFloat
 
 from .models import Service
+from .factories import ServiceFactory
 
 
 class ServicesListViewTest(TestCase):
@@ -25,11 +26,7 @@ class ServicesListViewTest(TestCase):
 
 class ServicesDetailViewTest(TestCase):
     def setUp(self):
-        self.service = Service.objects.create(
-            name="test service",
-            description="test description",
-            cost=random.uniform(0, 100)
-        )
+        self.service = ServiceFactory.create()
 
     def tearDown(self):
         self.service.delete()
@@ -48,6 +45,11 @@ class ServicesCreateViewTest(TestCase):
         self.service_name = Faker("word")
         # Check that the object is being created in the test
         Service.objects.filter(name=self.service_name).delete()
+        self.service = None
+
+    def tearDown(self):
+        if self.service:
+            self.service.delete()
 
     def test_create_service(self):
         response = self.client.post(
@@ -63,3 +65,40 @@ class ServicesCreateViewTest(TestCase):
         self.assertTrue(
             Service.objects.filter(name=self.service_name).exists()
         )
+        self.service = Service.objects.filter(name=self.service_name).first()
+
+
+class ServiceUpdateViewTest(TestCase):
+    def setUp(self):
+        self.service = ServiceFactory.create()
+
+    def tearDown(self):
+        self.service.delete()
+
+    def test_update_service(self):
+        updated_service = ServiceFactory()
+
+        response = self.client.post(
+            reverse(
+                "services:service_edit",
+                kwargs={"pk": self.service.pk},
+            ),
+            {
+                "name": updated_service.name,
+                "description": updated_service.description,
+                "cost": updated_service.cost,
+            },
+        )
+
+        # Check redirect
+        self.assertRedirects(
+            response,
+            reverse(
+                "services:service_detail",
+                kwargs={"pk": self.service.pk},
+            ))
+        # Check that the old primary key contains updated data
+        service_ = Service.objects.filter(pk=self.service.pk).first()
+        self.assertEqual(service_.name, updated_service.name)
+        self.assertEqual(service_.description, updated_service.description)
+        self.assertEqual(float(service_.cost), updated_service.cost)
