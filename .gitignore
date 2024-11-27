@@ -1,5 +1,6 @@
 # environment
 /.venv/
+/.venv_dev/
 /.idea/
 
 # technical specification
