@@ -1,9 +1,15 @@
-from rest_framework.viewsets import ModelViewSet
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 
 from .models import Service
-from .serializers import ServiceSerializer
 
 
-class ServiceViewSet(ModelViewSet):
-    queryset = Service.objects.all()
-    serializer_class = ServiceSerializer
+class ServicesListView(ListView):
+    template_name = "services/products-list.html"
+    model = Service
+    context_object_name = "services"
