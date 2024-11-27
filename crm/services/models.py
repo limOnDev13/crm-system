@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+
+class Service(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(null=False, blank=True)
+    price = models.DecimalField(null=False, default=0, max_digits=8, decimal_places=2)
