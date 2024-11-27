@@ -3,7 +3,6 @@ import random
 from django.test import TestCase
 from django.urls import reverse
 from factory.faker import Faker
-from factory.fuzzy import FuzzyFloat
 
 from .models import Service
 from .factories import ServiceFactory
@@ -102,3 +101,28 @@ class ServiceUpdateViewTest(TestCase):
         self.assertEqual(service_.name, updated_service.name)
         self.assertEqual(service_.description, updated_service.description)
         self.assertEqual(float(service_.cost), updated_service.cost)
+
+
+class ServiceDeleteViewTest(TestCase):
+    def setUp(self):
+        self.service = ServiceFactory.create()
+
+    def tearDown(self):
+        self.service.delete()
+
+    def test_delete_service(self):
+        response = self.client.post(
+            reverse(
+                "services:service_delete",
+                kwargs={"pk": self.service.pk},
+            )
+        )
+
+        # Check redirect
+        self.assertRedirects(
+            response,
+            reverse("services:services_list")
+        )
+        # Check that there is no data for the old primary key
+        not_existing_service = Service.objects.filter(pk=self.service.pk).first()
+        self.assertIsNone(not_existing_service)
