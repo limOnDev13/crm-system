@@ -2,9 +2,13 @@
 /.venv/
 /.venv_dev/
 /.idea/
+/.env
 
 # technical specification
 /ts/
 
 # db
 /crm/db*
+
+# pylint config
+/.pylintrc
