@@ -13,3 +13,8 @@ class ServicesListView(ListView):
     template_name = "services/products-list.html"
     model = Service
     context_object_name = "products"
+
+
+class ServiceDetailView(DetailView):
+    template_name = "services/products-detail.html"
+    model = Service
