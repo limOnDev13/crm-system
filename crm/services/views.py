@@ -37,3 +37,10 @@ class ServiceDeleteView(DeleteView):
     template_name = "services/products-delete.html"
     model = Service
     success_url = reverse_lazy("services:services_list")
+
+
+class ServiceCreateView(CreateView):
+    template_name = "services/products-create.html"
+    model = Service
+    fields = "name", "description", "cost"
+    success_url = reverse_lazy("services:services_list")
