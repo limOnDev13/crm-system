@@ -5,6 +5,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from django.urls import reverse
 
 from .models import Service
 
@@ -18,3 +19,16 @@ class ServicesListView(ListView):
 class ServiceDetailView(DetailView):
     template_name = "services/products-detail.html"
     model = Service
+
+
+class ServiceUpdateView(UpdateView):
+    template_name = "services/products-edit.html"
+    model = Service
+    fields = "name", "description", "cost"
+
+    def get_success_url(self):
+        return reverse(
+            "services:service_detail",
+            kwargs={"pk": self.object.pk}
+        )
+
