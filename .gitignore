@@ -4,3 +4,6 @@
 
 # technical specification
 /ts/
+
+# db
+/crm/db*
