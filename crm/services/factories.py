@@ -12,8 +12,3 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     name = factory.faker.Faker("word")
     description = factory.faker.Faker("text")
     cost = factory.fuzzy.FuzzyFloat(0, 100, precision=4)
-
-
-if __name__ == "__main__":
-    services = [ServiceFactory() for _ in range(10)]
-    print(services)
