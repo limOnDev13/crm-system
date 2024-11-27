@@ -17,6 +17,6 @@ class Command(BaseCommand):
             service = ServiceFactory.create()
             self.stdout.write(
                 f"Create #{num} service:\n"
-                f"pk={service.pk} name={service.name} price={service.price} description:\n{service.description}\n"
+                f"pk={service.pk} name={service.name} price={service.cost} description:\n{service.description}\n"
             )
             service.save()
