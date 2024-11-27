@@ -5,7 +5,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from .models import Service
 
@@ -32,3 +32,8 @@ class ServiceUpdateView(UpdateView):
             kwargs={"pk": self.object.pk}
         )
 
+
+class ServiceDeleteView(DeleteView):
+    template_name = "services/products-delete.html"
+    model = Service
+    success_url = reverse_lazy("services:services_list")
