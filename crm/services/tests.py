@@ -9,11 +9,13 @@ from .models import Service
 
 
 class ServicesListViewTest(TestCase):
+    """Test case class for testing ServicesListView."""
     fixtures = [
         "services-fixtures.json",
     ]
 
     def test_services(self):
+        """Test getting list of services"""
         response = self.client.get(reverse("services:services_list"))
 
         self.assertQuerySetEqual(
@@ -24,6 +26,7 @@ class ServicesListViewTest(TestCase):
 
 
 class ServicesDetailViewTest(TestCase):
+    """Test case class for testing ServicesDetailView."""
     def setUp(self):
         self.service = ServiceFactory.create()
 
@@ -31,6 +34,7 @@ class ServicesDetailViewTest(TestCase):
         self.service.delete()
 
     def test_get_service(self):
+        """Test getting details about service."""
         response = self.client.get(
             reverse("services:service_detail", kwargs={"pk": self.service.pk})
         )
@@ -39,6 +43,7 @@ class ServicesDetailViewTest(TestCase):
 
 
 class ServicesCreateViewTest(TestCase):
+    """Test case class for testing ServicesCreateView."""
     def setUp(self):
         self.service_name = Faker("word")
         # Check that the object is being created in the test
@@ -50,6 +55,7 @@ class ServicesCreateViewTest(TestCase):
             self.service.delete()
 
     def test_create_service(self):
+        """Test creating a new service."""
         response = self.client.post(
             reverse("services:service_create"),
             {
@@ -65,6 +71,7 @@ class ServicesCreateViewTest(TestCase):
 
 
 class ServiceUpdateViewTest(TestCase):
+    """Test case class for testing ServiceUpdateView."""
     def setUp(self):
         self.service = ServiceFactory.create()
 
@@ -72,6 +79,7 @@ class ServiceUpdateViewTest(TestCase):
         self.service.delete()
 
     def test_update_service(self):
+        """Test updating the service."""
         updated_service = ServiceFactory()
 
         response = self.client.post(
@@ -102,6 +110,7 @@ class ServiceUpdateViewTest(TestCase):
 
 
 class ServiceDeleteViewTest(TestCase):
+    """Test case class for testing ServiceDeleteView."""
     def setUp(self):
         self.service = ServiceFactory.create()
 
@@ -109,6 +118,7 @@ class ServiceDeleteViewTest(TestCase):
         self.service.delete()
 
     def test_delete_service(self):
+        """Test deleting the service."""
         response = self.client.post(
             reverse(
                 "services:service_delete",
