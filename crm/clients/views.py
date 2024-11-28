@@ -34,3 +34,11 @@ class LeadUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("clients:leads_detail", kwargs={"pk": self.object.pk})
+
+
+class LeadDeleteView(DeleteView):
+    """DeleteView class for deleting the lead."""
+
+    template_name = "clients/leads-delete.html"
+    model = Lead
+    success_url = reverse_lazy("clients:leads_list")
