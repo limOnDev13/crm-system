@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -34,3 +34,11 @@ class AdvertisingUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("advertising:ads_detail", kwargs={"pk": self.object.pk})
+
+
+class AdvertisingDeleteView(DeleteView):
+    """DeleteView class for deleting the advertising."""
+
+    template_name = "advertising/ads-delete.html"
+    model = Advertising
+    success_url = reverse_lazy("advertising:ads_list")
