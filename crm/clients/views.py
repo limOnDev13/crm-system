@@ -1,3 +1,18 @@
-from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
-# Create your views here.
+from .models import Lead
+
+
+class LeadsListView(ListView):
+    """ListView class for getting list of leads."""
+
+    template_name = "clients/leads-list.html"
+    queryset = Lead.objects.select_related("ads")
+    context_object_name = "leads"
