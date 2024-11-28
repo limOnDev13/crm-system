@@ -114,3 +114,28 @@ class AdsUpdateViewTest(TestCase):
         self.assertEqual(ads_.channel, updated_ads.channel)
         self.assertEqual(float(ads_.budget), updated_ads.budget)
         self.assertEqual(ads_.product.pk, updated_ads.product.pk)
+
+
+class AdsDeleteViewTest(TestCase):
+    """Test case class for testing AdvertisingDeleteView."""
+
+    def setUp(self):
+        self.ads = AdvertisingFactory.create()
+
+    def tearDown(self):
+        self.ads.delete()
+
+    def test_delete_ads(self):
+        """Test deleting the ads."""
+        response = self.client.post(
+            reverse(
+                "advertising:ads_delete",
+                kwargs={"pk": self.ads.pk},
+            )
+        )
+
+        # Check redirect
+        self.assertRedirects(response, reverse("advertising:ads_list"))
+        # Check that there is no data for the old primary key
+        not_existing_ads = Advertising.objects.filter(pk=self.ads.pk).first()
+        self.assertIsNone(not_existing_ads)
