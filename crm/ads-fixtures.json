@@ -1,0 +1,102 @@
+[
+  {
+    "model": "advertising.advertising",
+    "pk": 1,
+    "fields": {
+      "name": "end",
+      "channel": "camera",
+      "budget": "69.91",
+      "product": 1
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 2,
+    "fields": {
+      "name": "year",
+      "channel": "goal",
+      "budget": "52.79",
+      "product": 2
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 3,
+    "fields": {
+      "name": "show",
+      "channel": "one",
+      "budget": "36.61",
+      "product": 3
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 4,
+    "fields": {
+      "name": "son",
+      "channel": "perform",
+      "budget": "47.31",
+      "product": 4
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 5,
+    "fields": {
+      "name": "beautiful",
+      "channel": "somebody",
+      "budget": "63.43",
+      "product": 5
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 6,
+    "fields": {
+      "name": "discussion",
+      "channel": "tonight",
+      "budget": "7.70",
+      "product": 6
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 7,
+    "fields": {
+      "name": "effect",
+      "channel": "customer",
+      "budget": "98.45",
+      "product": 7
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 8,
+    "fields": {
+      "name": "follow",
+      "channel": "experience",
+      "budget": "25.82",
+      "product": 8
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 9,
+    "fields": {
+      "name": "as",
+      "channel": "draw",
+      "budget": "97.36",
+      "product": 9
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 10,
+    "fields": {
+      "name": "necessary",
+      "channel": "data",
+      "budget": "4.72",
+      "product": 10
+    }
+  }
+]
