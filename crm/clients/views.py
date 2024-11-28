@@ -23,3 +23,14 @@ class LeadDetailView(DetailView):
 
     template_name = "clients/leads-detail.html"
     queryset = Lead.objects.select_related("ads")
+
+
+class LeadUpdateView(UpdateView):
+    """UpdateView class for updating the lead."""
+
+    template_name = "clients/leads-edit.html"
+    model = Lead
+    fields = "first_name", "second_name", "phone", "email", "ads"
+
+    def get_success_url(self):
+        return reverse("clients:leads_detail", kwargs={"pk": self.object.pk})
