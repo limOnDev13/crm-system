@@ -22,4 +22,4 @@ class LeadDetailView(DetailView):
     """DetailView class for getting details about the lead."""
 
     template_name = "clients/leads-detail.html"
-    queryset = Lead.objects.select_related("product")
+    queryset = Lead.objects.select_related("ads")
