@@ -86,3 +86,48 @@ class LeadsCreateViewTest(TestCase):
         self.assertRedirects(response, reverse("clients:leads_list"))
         self.assertTrue(self.qs.exists())
         self.lead = self.qs.first()
+
+
+class LeadsUpdateViewTest(TestCase):
+    """Test case class for testing LeadUpdateView."""
+
+    def setUp(self):
+        self.lead = LeadFactory.create()
+
+    def tearDown(self):
+        self.lead.delete()
+
+    def test_update_ads(self):
+        """Test updating the ads."""
+        updated_lead = LeadFactory.build()
+        updated_ads = AdvertisingFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:leads_edit",
+                kwargs={"pk": self.lead.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "second_name": updated_lead.second_name,
+                "phone": updated_lead.phone,
+                "email": updated_lead.email,
+                "ads": updated_ads.pk,
+            },
+        )
+
+        # Check redirect
+        self.assertRedirects(
+            response,
+            reverse(
+                "clients:leads_detail",
+                kwargs={"pk": self.lead.pk},
+            ),
+        )
+        # Check that the old primary key contains updated data
+        lead_: Lead = Lead.objects.filter(pk=self.lead.pk).first()
+        self.assertEqual(lead_.first_name, updated_lead.first_name)
+        self.assertEqual(lead_.second_name, updated_lead.second_name)
+        self.assertEqual(lead_.phone, updated_lead.phone)
+        self.assertEqual(lead_.email, updated_lead.email)
+        self.assertEqual(lead_.ads.pk, updated_ads.pk)
