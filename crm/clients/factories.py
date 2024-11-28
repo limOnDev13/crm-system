@@ -13,6 +13,6 @@ class LeadFactory(factory.django.DjangoModelFactory):
 
     first_name = factory.faker.Faker("first_name")
     second_name = factory.faker.Faker("last_name")
-    phone = factory.Sequence(lambda n: "+7 (999) 000 %04d" % n)
+    phone = factory.Sequence(lambda n: "+7 (999) 000 {:04d}".format(n))
     email = factory.faker.Faker("email")
     ads = factory.SubFactory(AdvertisingFactory)
