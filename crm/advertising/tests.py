@@ -25,3 +25,21 @@ class AdvertisingListViewTest(TestCase):
             values=(s.pk for s in response.context["ads"]),
             transform=lambda p: p.pk,
         )
+
+
+class AdvertisingDetailViewTest(TestCase):
+    """Test case class for testing AdvertisingDetailView."""
+
+    def setUp(self):
+        self.ads = AdvertisingFactory.create()
+
+    def tearDown(self):
+        self.ads.delete()
+
+    def test_get_details_about_ads(self):
+        """Test getting details about advertising."""
+        response = self.client.get(
+            reverse("advertising:ads_detail", kwargs={"pk": self.ads.pk})
+        )
+
+        self.assertEqual(response.status_code, 200)
