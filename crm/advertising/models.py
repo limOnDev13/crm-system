@@ -17,5 +17,7 @@ class Advertising(models.Model):
         help_text="advertising budget",
     )
     product = models.ForeignKey(
-        Service, on_delete=models.CASCADE, help_text="advertised service"
+        Service,
+        on_delete=models.CASCADE,
+        help_text="advertised service",
     )
