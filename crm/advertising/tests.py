@@ -72,3 +72,45 @@ class AdsCreateViewTest(TestCase):
 
         self.assertRedirects(response, reverse("advertising:ads_list"))
         self.assertTrue(Advertising.objects.filter(name=self.ads_name).exists())
+
+
+class AdsUpdateViewTest(TestCase):
+    """Test case class for testing AdvertisingUpdateView."""
+
+    def setUp(self):
+        self.ads = AdvertisingFactory.create()
+
+    def tearDown(self):
+        self.ads.delete()
+
+    def test_update_ads(self):
+        """Test updating the ads."""
+        updated_ads = AdvertisingFactory()
+
+        response = self.client.post(
+            reverse(
+                "advertising:ads_update",
+                kwargs={"pk": self.ads.pk},
+            ),
+            {
+                "name": updated_ads.name,
+                "channel": updated_ads.channel,
+                "budget": updated_ads.budget,
+                "product": updated_ads.product.pk,
+            },
+        )
+
+        # Check redirect
+        self.assertRedirects(
+            response,
+            reverse(
+                "advertising:ads_detail",
+                kwargs={"pk": self.ads.pk},
+            ),
+        )
+        # Check that the old primary key contains updated data
+        ads_ = Advertising.objects.filter(pk=self.ads.pk).first()
+        self.assertEqual(ads_.name, updated_ads.name)
+        self.assertEqual(ads_.channel, updated_ads.channel)
+        self.assertEqual(float(ads_.budget), updated_ads.budget)
+        self.assertEqual(ads_.product.pk, updated_ads.product.pk)
