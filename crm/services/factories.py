@@ -1,6 +1,6 @@
-import factory.faker
 import factory.fuzzy
-from services.models import Service
+
+from .models import Service
 
 
 class ServiceFactory(factory.django.DjangoModelFactory):
