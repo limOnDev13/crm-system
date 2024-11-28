@@ -1,3 +1,12 @@
 from django.db import models
 
-# Create your models here.
+from services.models import Service
+
+
+class Advertising(models.Model):
+    """ORM view of the Advertising table"""
+
+    name = models.CharField(max_length=100, help_text="the name of the advertising campaign")
+    channel = models.CharField(max_length=100)
+    budget = models.DecimalField(null=False, default=0, max_digits=8, decimal_places=2)
+    product = models.ForeignKey(Service, on_delete=models.CASCADE)
