@@ -14,5 +14,5 @@ class Lead(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         help_text="the advertising campaign from which the"
-                  " lead learned about the service",
+        " lead learned about the service",
     )
