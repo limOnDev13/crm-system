@@ -42,3 +42,12 @@ class AdvertisingDeleteView(DeleteView):
     template_name = "advertising/ads-delete.html"
     model = Advertising
     success_url = reverse_lazy("advertising:ads_list")
+
+
+class AdvertisingCreateView(CreateView):
+    """CreateView class for creating a new advertising."""
+
+    template_name = "advertising/ads-create.html"
+    model = Advertising
+    fields = "name", "channel", "budget", "product"
+    success_url = reverse_lazy("advertising:ads_list")
