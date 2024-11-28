@@ -10,6 +10,7 @@ from .models import Service
 
 class ServicesListViewTest(TestCase):
     """Test case class for testing ServicesListView."""
+
     fixtures = [
         "services-fixtures.json",
     ]
@@ -27,6 +28,7 @@ class ServicesListViewTest(TestCase):
 
 class ServicesDetailViewTest(TestCase):
     """Test case class for testing ServicesDetailView."""
+
     def setUp(self):
         self.service = ServiceFactory.create()
 
@@ -44,6 +46,7 @@ class ServicesDetailViewTest(TestCase):
 
 class ServicesCreateViewTest(TestCase):
     """Test case class for testing ServicesCreateView."""
+
     def setUp(self):
         self.service_name = Faker("word")
         # Check that the object is being created in the test
@@ -72,6 +75,7 @@ class ServicesCreateViewTest(TestCase):
 
 class ServiceUpdateViewTest(TestCase):
     """Test case class for testing ServiceUpdateView."""
+
     def setUp(self):
         self.service = ServiceFactory.create()
 
@@ -111,6 +115,7 @@ class ServiceUpdateViewTest(TestCase):
 
 class ServiceDeleteViewTest(TestCase):
     """Test case class for testing ServiceDeleteView."""
+
     def setUp(self):
         self.service = ServiceFactory.create()
 

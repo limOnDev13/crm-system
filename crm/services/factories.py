@@ -5,6 +5,7 @@ from services.models import Service
 
 class ServiceFactory(factory.django.DjangoModelFactory):
     """Service factory class."""
+
     class Meta:
         model = Service  # Equivalent to ``model = myapp.models.User``
         django_get_or_create = ("name", "description", "cost")
