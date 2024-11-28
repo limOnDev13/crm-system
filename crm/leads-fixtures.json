@@ -1,0 +1,112 @@
+[
+  {
+    "model": "clients.lead",
+    "pk": 1,
+    "fields": {
+      "first_name": "Mitchell",
+      "second_name": "Blanchard",
+      "phone": "+7 (999) 000 0000",
+      "email": "kara85@example.org",
+      "ads": 1
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 2,
+    "fields": {
+      "first_name": "Samuel",
+      "second_name": "Hamilton",
+      "phone": "+7 (999) 000 0001",
+      "email": "wjohnson@example.net",
+      "ads": 2
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 3,
+    "fields": {
+      "first_name": "Marie",
+      "second_name": "Salas",
+      "phone": "+7 (999) 000 0002",
+      "email": "larry78@example.com",
+      "ads": 3
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 4,
+    "fields": {
+      "first_name": "Joanna",
+      "second_name": "Lutz",
+      "phone": "+7 (999) 000 0003",
+      "email": "qstrickland@example.com",
+      "ads": 4
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 5,
+    "fields": {
+      "first_name": "George",
+      "second_name": "Ross",
+      "phone": "+7 (999) 000 0004",
+      "email": "adammarshall@example.net",
+      "ads": 5
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 6,
+    "fields": {
+      "first_name": "Heather",
+      "second_name": "Cox",
+      "phone": "+7 (999) 000 0005",
+      "email": "diane72@example.com",
+      "ads": 6
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 7,
+    "fields": {
+      "first_name": "Gerald",
+      "second_name": "Fisher",
+      "phone": "+7 (999) 000 0006",
+      "email": "stephaniewalker@example.org",
+      "ads": 7
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 8,
+    "fields": {
+      "first_name": "Katherine",
+      "second_name": "Hughes",
+      "phone": "+7 (999) 000 0007",
+      "email": "eduardo17@example.com",
+      "ads": 8
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 9,
+    "fields": {
+      "first_name": "Diana",
+      "second_name": "White",
+      "phone": "+7 (999) 000 0008",
+      "email": "stricklandyolanda@example.net",
+      "ads": 9
+    }
+  },
+  {
+    "model": "clients.lead",
+    "pk": 10,
+    "fields": {
+      "first_name": "Roberto",
+      "second_name": "Logan",
+      "phone": "+7 (999) 000 0009",
+      "email": "acannon@example.com",
+      "ads": 10
+    }
+  }
+]
