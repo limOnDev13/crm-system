@@ -1,0 +1,92 @@
+[
+  {
+    "model": "services.service",
+    "pk": 2,
+    "fields": {
+      "name": "left",
+      "description": "Lead order former she. Forward exist election like certain personal arm. Value themselves suffer hour walk follow field shake. Possible represent sound brother hear stand.",
+      "cost": "49.18"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 3,
+    "fields": {
+      "name": "with",
+      "description": "Conference seem however center rest. Among actually administration recognize respond. Kitchen occur sense.\nPresent hospital money play thing. Service word state writer everyone another.",
+      "cost": "33.04"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 4,
+    "fields": {
+      "name": "reality",
+      "description": "Media TV forward short your standard. Office myself manager thing care store argue.\nDrive development officer increase attack lawyer. Night performance maintain education herself student hear.",
+      "cost": "82.69"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 5,
+    "fields": {
+      "name": "popular",
+      "description": "Must treat natural agree claim billion former task.\nDark someone long somebody human floor. Manager system card produce.\nAlthough them middle school. Then sort share result should natural.",
+      "cost": "93.13"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 6,
+    "fields": {
+      "name": "history",
+      "description": "Skill position especially clearly perform bring walk. Enjoy drive health area already life.\nNorth source family easy edge weight magazine.\nHimself teach even service believe control same money.",
+      "cost": "25.44"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 7,
+    "fields": {
+      "name": "hundred",
+      "description": "Any opportunity not official. Move continue stock especially natural increase. Human shake increase.\nHouse major billion quality. Drive friend operation part.",
+      "cost": "79.22"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 8,
+    "fields": {
+      "name": "certainly",
+      "description": "Up this side write term newspaper month stay. Woman one Republican others adult traditional. Executive rock over person show campaign.\nActivity drop upon tonight structure.",
+      "cost": "92.30"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 9,
+    "fields": {
+      "name": "place",
+      "description": "Guess put hope small. Score score friend water. Other buy answer area when. Imagine class into American college federal position our.",
+      "cost": "23.30"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 10,
+    "fields": {
+      "name": "indeed",
+      "description": "Service sign exist question manager. Upon sort tell chair line late. Per thousand president body accept Mr.\nMrs red indeed subject model baby. Environmental worry worker interest apply it.",
+      "cost": "9.59"
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 11,
+    "fields": {
+      "name": "good",
+      "description": "Opportunity what occur staff think system happy. Blood serve sometimes say strong might approach.",
+      "cost": "25.97"
+    }
+  }
+]

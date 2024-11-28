@@ -1,7 +1,8 @@
-from django.urls import path
+from functools import partial
+from typing import List
+
 
 app_name = "myauth"
 
-urlpatterns = [
-
+urlpatterns: List[partial] = [
 ]
