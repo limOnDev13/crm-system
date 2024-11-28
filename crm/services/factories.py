@@ -1,3 +1,5 @@
+import random
+
 import factory.fuzzy
 
 from .models import Service
@@ -12,4 +14,4 @@ class ServiceFactory(factory.django.DjangoModelFactory):
 
     name = factory.faker.Faker("word")
     description = factory.faker.Faker("text")
-    cost = factory.fuzzy.FuzzyFloat(0, 100, precision=4)
+    cost = factory.LazyAttribute(lambda x: round(random.uniform(0, 100), 2))
