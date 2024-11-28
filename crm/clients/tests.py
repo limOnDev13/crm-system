@@ -97,7 +97,7 @@ class LeadsUpdateViewTest(TestCase):
     def tearDown(self):
         self.lead.delete()
 
-    def test_update_ads(self):
+    def test_update_lead(self):
         """Test updating the ads."""
         updated_lead = LeadFactory.build()
         updated_ads = AdvertisingFactory.create()
@@ -131,3 +131,28 @@ class LeadsUpdateViewTest(TestCase):
         self.assertEqual(lead_.phone, updated_lead.phone)
         self.assertEqual(lead_.email, updated_lead.email)
         self.assertEqual(lead_.ads.pk, updated_ads.pk)
+
+
+class LeadsDeleteViewTest(TestCase):
+    """Test case class for testing LeadDeleteView."""
+
+    def setUp(self):
+        self.lead = LeadFactory.create()
+
+    def tearDown(self):
+        self.lead.delete()
+
+    def test_delete_lead(self):
+        """Test deleting the lead."""
+        response = self.client.post(
+            reverse(
+                "clients:leads_delete",
+                kwargs={"pk": self.lead.pk},
+            )
+        )
+
+        # Check redirect
+        self.assertRedirects(response, reverse("clients:leads_list"))
+        # Check that there is no data for the old primary key
+        not_existing_ads = Lead.objects.filter(pk=self.lead.pk).first()
+        self.assertIsNone(not_existing_ads)
