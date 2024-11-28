@@ -21,3 +21,6 @@ class Advertising(models.Model):
         on_delete=models.CASCADE,
         help_text="advertised service",
     )
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.product.name} ({self.pk})"
