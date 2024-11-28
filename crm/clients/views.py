@@ -42,3 +42,12 @@ class LeadDeleteView(DeleteView):
     template_name = "clients/leads-delete.html"
     model = Lead
     success_url = reverse_lazy("clients:leads_list")
+
+
+class LeadCreateView(CreateView):
+    """CreateView class for creating a new lead."""
+
+    template_name = "clients/leads-create.html"
+    model = Lead
+    fields = "first_name", "second_name", "phone", "email", "ads"
+    success_url = reverse_lazy("clients:leads_list")
