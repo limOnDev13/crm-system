@@ -1,4 +1,9 @@
-from functools import partial
-from typing import List
+from django.urls import path
 
-urlpatterns: List[partial] = []
+from .views import AdvertisingListView
+
+app_name = "advertising"
+
+urlpatterns = [
+    path("ads/", AdvertisingListView.as_view(), name="ads_list"),
+]
