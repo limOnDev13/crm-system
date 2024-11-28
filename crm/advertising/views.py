@@ -26,7 +26,7 @@ class AdvertisingDetailView(DetailView):
 
 
 class AdvertisingUpdateView(UpdateView):
-    """UpdateView class for updating the service."""
+    """UpdateView class for updating the ads."""
 
     template_name = "advertising/ads-edit.html"
     model = Advertising

@@ -1,4 +1,5 @@
-import factory.faker
+import random
+
 import factory.fuzzy
 from services.factories import ServiceFactory
 
@@ -14,5 +15,5 @@ class AdvertisingFactory(factory.django.DjangoModelFactory):
 
     name = factory.faker.Faker("word")
     channel = factory.faker.Faker("word")
-    budget = factory.fuzzy.FuzzyFloat(0, 100, precision=4)
+    budget = factory.LazyAttribute(lambda x: round(random.uniform(0, 100), 2))
     product = factory.SubFactory(ServiceFactory)

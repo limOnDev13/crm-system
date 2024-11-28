@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'myauth.apps.MyauthConfig',
     'services.apps.ServicesConfig',
     'advertising.apps.AdvertisingConfig',
+    'clients.apps.ClientsConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,8 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / 'crm' / 'templates',
             BASE_DIR / 'services' / 'templates',
-            BASE_DIR / 'advertising' / 'templates'
+            BASE_DIR / 'advertising' / 'templates',
+            BASE_DIR / 'clients' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
