@@ -16,3 +16,10 @@ class LeadsListView(ListView):
     template_name = "clients/leads-list.html"
     queryset = Lead.objects.select_related("ads")
     context_object_name = "leads"
+
+
+class LeadDetailView(DetailView):
+    """DetailView class for getting details about the lead."""
+
+    template_name = "clients/leads-detail.html"
+    queryset = Lead.objects.select_related("product")
