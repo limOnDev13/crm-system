@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'services.apps.ServicesConfig',
     'advertising.apps.AdvertisingConfig',
     'clients.apps.ClientsConfig',
+    "contracts.apps.ContractsConfig",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,7 @@ TEMPLATES = [
             BASE_DIR / 'services' / 'templates',
             BASE_DIR / 'advertising' / 'templates',
             BASE_DIR / 'clients' / 'templates',
+            BASE_DIR / 'contracts' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
