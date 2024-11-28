@@ -1,8 +1,8 @@
-import random
+from typing import Optional
 
+from advertising.factories import AdvertisingFactory
 from django.test import TestCase
 from django.urls import reverse
-from factory.faker import Faker
 
 from .factories import LeadFactory
 from .models import Lead
@@ -44,3 +44,45 @@ class LeadsDetailViewTest(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
+
+
+class LeadsCreateViewTest(TestCase):
+    """Test case class for testing LeadCreateView."""
+
+    def setUp(self):
+        self.lead_data = LeadFactory.build()
+        self.ads = AdvertisingFactory.create()
+        self.qs = Lead.objects.filter(
+            first_name=self.lead_data.first_name,
+            second_name=self.lead_data.second_name,
+            phone=self.lead_data.phone,
+            email=self.lead_data.email,
+            ads=self.ads.pk,
+        )
+
+        # Check that the object is being created in the test
+        self.qs.delete()
+
+        self.lead: Optional[Lead] = None
+
+    def tearDown(self):
+        self.ads.delete()
+        if self.lead:
+            self.lead.delete()
+
+    def test_create_lead(self):
+        """Test creating a new lead."""
+        response = self.client.post(
+            reverse("clients:leads_create"),
+            {
+                "first_name": self.lead_data.first_name,
+                "second_name": self.lead_data.second_name,
+                "phone": self.lead_data.phone,
+                "email": self.lead_data.email,
+                "ads": self.ads.pk,
+            },
+        )
+
+        self.assertRedirects(response, reverse("clients:leads_list"))
+        self.assertTrue(self.qs.exists())
+        self.lead = self.qs.first()
