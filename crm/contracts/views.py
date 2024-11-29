@@ -23,3 +23,14 @@ class ContractDetailView(DetailView):
 
     template_name = "contracts/contracts-detail.html"
     queryset = Contract.objects.select_related("product")
+
+
+class ContractUpdateView(UpdateView):
+    """UpdateView class for updating the contract."""
+
+    template_name = "contracts/contracts-edit.html"
+    model = Contract
+    fields = "name", "product", "doc", "end_date", "cost"
+
+    def get_success_url(self):
+        return reverse("contracts:contract_detail", kwargs={"pk": self.object.pk})
