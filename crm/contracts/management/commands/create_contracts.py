@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 f"pk={contract.pk} name={contract.name}\n"
                 f"product.pk={contract.product.pk} product.pk={contract.product.name}\n"
                 f"doc.filename={contract.doc.name}\n"
-                f"date={contract.date}\n"
-                f"duration={contract.duration}\n"
+                f"start_date={contract.start_date}\n"
+                f"end_date={contract.end_date}\n"
                 f"cost={contract.cost}\n"
             )
