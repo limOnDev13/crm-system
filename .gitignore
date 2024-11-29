@@ -12,3 +12,7 @@
 
 # pylint config
 /.pylintrc
+
+# uploaded files
+/crm/upload/
+/crm/empty_file.txt
