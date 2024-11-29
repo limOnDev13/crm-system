@@ -1,8 +1,7 @@
-from datetime import timedelta, datetime
+from datetime import date
 
-from django.db import models
 from django.core.exceptions import ValidationError
-
+from django.db import models
 from services.models import Service
 
 
@@ -25,16 +24,22 @@ class Contract(models.Model):
         help_text="the file with the contract document",
     )
     start_date = models.DateField(
-        null=False, auto_now_add=True, help_text="date of conclusion of the contract",
+        null=False,
+        auto_now_add=True,
+        help_text="date of conclusion of the contract",
     )
-    end_date = models.DateField(
-        null=False, help_text="contract completion date",
-    )
+    end_date = models.DateField(null=False, help_text="contract completion date")
     cost = models.DecimalField(null=False, default=0, max_digits=8, decimal_places=2)
 
     def clean(self):
-        if self.end_date < self.start_date:
+
+        start_date = self.start_date
+
+        if not start_date:
+            start_date = date.today()
+
+        if self.end_date < start_date:
             raise ValidationError(
                 "The end date must not be less than the start date.",
-                params={"start date": self.start_date, "end date": self.end_date},
+                params={"start date": start_date, "end date": self.end_date},
             )
