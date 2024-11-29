@@ -10,13 +10,13 @@ from .models import Contract
 
 
 def _create_empty_file(
-    dir: Optional[str] = None, filename: str = "empty_file.txt"
+    file_dir: Optional[str] = None, filename: str = "empty_file.txt"
 ) -> str:
     """Create empty file for factory."""
-    if not dir:
+    if not file_dir:
         path = filename
     else:
-        path = os.path.join(dir, filename)
+        path = os.path.join(file_dir, filename)
 
     with open(path, encoding="UTF-8", mode="w"):
         pass
