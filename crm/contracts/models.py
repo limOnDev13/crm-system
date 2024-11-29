@@ -5,6 +5,8 @@ from services.models import Service
 
 
 class Contract(models.Model):
+    """ORM view of Contract table."""
+
     name = models.CharField(
         max_length=100,
         null=False,
