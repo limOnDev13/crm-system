@@ -1,6 +1,6 @@
 import os
 import random
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Optional
 
 import factory.fuzzy
@@ -29,11 +29,10 @@ class ContractFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Contract
-        django_get_or_create = ("name", "product", "doc", "date", "duration", "cost")
+        django_get_or_create = ("name", "product", "doc", "cost", "end_date")
 
     name = factory.faker.Faker("word")
     product = factory.SubFactory(ServiceFactory)
     doc = factory.django.FileField(from_path=_create_empty_file())
-    date = factory.faker.Faker("date_object")
-    duration = timedelta(days=1)
     cost = factory.LazyAttribute(lambda x: round(random.uniform(0, 100), 2))
+    end_date = factory.LazyAttribute(lambda x: datetime.now() + timedelta(days=1))
