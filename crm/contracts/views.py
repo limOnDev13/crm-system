@@ -16,3 +16,10 @@ class ContractListView(ListView):
     template_name = "contracts/contracts-list.html"
     queryset = Contract.objects.select_related("product")
     context_object_name = "contracts"
+
+
+class ContractDetailView(DetailView):
+    """DetailView class for getting details about the contract."""
+
+    template_name = "contracts/contracts-detail.html"
+    queryset = Contract.objects.select_related("product")
