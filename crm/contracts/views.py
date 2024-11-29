@@ -42,3 +42,12 @@ class ContractDeleteView(DeleteView):
     template_name = "contracts/contracts-delete.html"
     model = Contract
     success_url = reverse_lazy("contracts:contracts_list")
+
+
+class ContractCreateView(CreateView):
+    """CreateView class for creating a new contract."""
+
+    template_name = "contracts/contracts-create.html"
+    model = Contract
+    fields = "name", "product", "doc", "end_date", "cost"
+    success_url = reverse_lazy("contracts:contracts_list")
