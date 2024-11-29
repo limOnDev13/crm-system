@@ -34,3 +34,11 @@ class ContractUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("contracts:contract_detail", kwargs={"pk": self.object.pk})
+
+
+class ContractDeleteView(DeleteView):
+    """DeleteView class for deleting the contract."""
+
+    template_name = "contracts/contracts-delete.html"
+    model = Contract
+    success_url = reverse_lazy("contracts:contracts_list")
