@@ -1,15 +1,17 @@
+import os
 import random
 from datetime import timedelta
 from typing import Optional
-import os
 
 import factory.fuzzy
-
-from .models import Contract
 from services.factories import ServiceFactory
 
+from .models import Contract
 
-def _create_empty_file(dir: Optional[str] = None, filename: str = "empty_file.txt") -> str:
+
+def _create_empty_file(
+    dir: Optional[str] = None, filename: str = "empty_file.txt"
+) -> str:
     """Create empty file for factory."""
     if not dir:
         path = filename
