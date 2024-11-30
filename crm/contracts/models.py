@@ -1,4 +1,5 @@
 from datetime import date
+import os
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -43,3 +44,8 @@ class Contract(models.Model):
                 "The end date must not be less than the start date.",
                 params={"start date": start_date, "end date": self.end_date},
             )
+
+    def delete(self, *args, **kwargs):
+        path = self.doc.path
+        os.remove(path)
+        super(Contract, self).delete(*args, **kwargs)
