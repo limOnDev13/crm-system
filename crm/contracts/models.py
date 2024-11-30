@@ -1,5 +1,5 @@
-from datetime import date
 import os
+from datetime import date
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -48,4 +48,4 @@ class Contract(models.Model):
     def delete(self, *args, **kwargs):
         path = self.doc.path
         os.remove(path)
-        super(Contract, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)

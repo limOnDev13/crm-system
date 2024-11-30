@@ -1,12 +1,12 @@
-from typing import Optional
-from datetime import date, timedelta
 import os
+from datetime import date, timedelta
+from typing import Optional
 
 from advertising.factories import ServiceFactory
-from django.test import TestCase
-from django.urls import reverse
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.test import TestCase
+from django.urls import reverse
 
 from .factories import ContractFactory
 from .models import Contract
@@ -23,6 +23,7 @@ def _clear_test_files():
 
 class ContractTestCase(TestCase):
     """Test case class for testing model Contract."""
+
     def setUp(self):
         self.contract_data = ContractFactory.build()
         self.product = ServiceFactory.create()
