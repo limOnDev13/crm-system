@@ -54,7 +54,7 @@ class LeadsCreateViewTest(TestCase):
         self.ads = AdvertisingFactory.create()
         self.qs = Lead.objects.filter(
             first_name=self.lead_data.first_name,
-            second_name=self.lead_data.second_name,
+            last_name=self.lead_data.last_name,
             phone=self.lead_data.phone,
             email=self.lead_data.email,
             ads=self.ads.pk,
@@ -76,7 +76,7 @@ class LeadsCreateViewTest(TestCase):
             reverse("clients:leads_create"),
             {
                 "first_name": self.lead_data.first_name,
-                "second_name": self.lead_data.second_name,
+                "last_name": self.lead_data.last_name,
                 "phone": self.lead_data.phone,
                 "email": self.lead_data.email,
                 "ads": self.ads.pk,
@@ -109,7 +109,7 @@ class LeadsUpdateViewTest(TestCase):
             ),
             {
                 "first_name": updated_lead.first_name,
-                "second_name": updated_lead.second_name,
+                "last_name": updated_lead.last_name,
                 "phone": updated_lead.phone,
                 "email": updated_lead.email,
                 "ads": updated_ads.pk,
@@ -127,7 +127,7 @@ class LeadsUpdateViewTest(TestCase):
         # Check that the old primary key contains updated data
         lead_: Lead = Lead.objects.filter(pk=self.lead.pk).first()
         self.assertEqual(lead_.first_name, updated_lead.first_name)
-        self.assertEqual(lead_.second_name, updated_lead.second_name)
+        self.assertEqual(lead_.last_name, updated_lead.last_name)
         self.assertEqual(lead_.phone, updated_lead.phone)
         self.assertEqual(lead_.email, updated_lead.email)
         self.assertEqual(lead_.ads.pk, updated_ads.pk)
