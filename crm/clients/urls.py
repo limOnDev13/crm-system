@@ -1,12 +1,13 @@
 from django.urls import path
 
 from .views import (
+    CustomerDetailView,
+    CustomersListView,
     LeadCreateView,
     LeadDeleteView,
     LeadDetailView,
     LeadsListView,
     LeadUpdateView,
-    CustomersListView,
 )
 
 app_name = "clients"
@@ -18,4 +19,5 @@ urlpatterns = [
     path("leads/<int:pk>/edit/", LeadUpdateView.as_view(), name="leads_edit"),
     path("leads/<int:pk>/delete/", LeadDeleteView.as_view(), name="leads_delete"),
     path("customers/", CustomersListView.as_view(), name="customers_list"),
+    path("customers/<int:pk>/", CustomerDetailView.as_view(), name="customers_detail"),
 ]
