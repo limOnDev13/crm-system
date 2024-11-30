@@ -1,11 +1,22 @@
 from typing import Optional
+import os
 
 from advertising.factories import ServiceFactory
 from django.test import TestCase
 from django.urls import reverse
+from django.conf import settings
 
 from .factories import ContractFactory
 from .models import Contract
+
+
+def _clear_test_files():
+    """Clear generated files"""
+    path = settings.BASE_DIR / "upload" / "contracts"
+    files = os.listdir(path)
+    for filename in files:
+        file_path = path / filename
+        os.remove(file_path)
 
 
 class ContractsListViewTest(TestCase):
@@ -36,6 +47,8 @@ class ContractDetailViewTest(TestCase):
     def tearDown(self):
         self.contract.delete()
 
+        _clear_test_files()
+
     def test_get_details_about_contract(self):
         """Test getting details about the contract."""
         response = self.client.get(
@@ -63,6 +76,8 @@ class ContractCreateViewTest(TestCase):
     def tearDown(self):
         self.product.delete()  # The contract will be deleted in a cascade
 
+        _clear_test_files()
+
     def test_create_contract(self):
         """Test creating a new contract."""
         response = self.client.post(
@@ -88,6 +103,8 @@ class ContractUpdateViewTest(TestCase):
 
     def tearDown(self):
         self.contract.delete()
+
+        _clear_test_files()
 
     def test_update_contract(self):
         """Test updating the contract."""
@@ -131,7 +148,7 @@ class ContractDeleteViewTest(TestCase):
         self.contract = ContractFactory.create()
 
     def tearDown(self):
-        self.contract.delete()
+        _clear_test_files()
 
     def test_delete_contract(self):
         """Test deleting the contract."""
