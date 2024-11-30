@@ -10,7 +10,7 @@ from .models import Contract
 
 
 def _create_test_file(
-    file_dir: Optional[str] = None, filename: str = "empty_file.txt"
+    file_dir: Optional[str] = None, filename: str = "test_file.txt"
 ) -> str:
     """Create empty file for factory."""
     if not file_dir:
