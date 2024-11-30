@@ -3,9 +3,7 @@ from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):
-    help = (
-        "Create random customers."
-    )
+    help = "Create random customers."
 
     def add_arguments(self, parser):
         parser.add_argument("count", type=int, help="Count of customers")
