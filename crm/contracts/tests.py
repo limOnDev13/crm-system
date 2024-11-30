@@ -90,7 +90,7 @@ class ContractUpdateViewTest(TestCase):
         self.contract.delete()
 
     def test_update_contract(self):
-        """Test updating the ads."""
+        """Test updating the contract."""
         updated_contract = ContractFactory.build()
         updated_product = ServiceFactory.create()
 
@@ -122,3 +122,28 @@ class ContractUpdateViewTest(TestCase):
         self.assertEqual(contract_.product.pk, updated_product.pk)
         self.assertEqual(contract_.end_date, updated_contract.end_date)
         self.assertEqual(float(contract_.cost), updated_contract.cost)
+
+
+class ContractDeleteViewTest(TestCase):
+    """Test case class for testing ContractDeleteView."""
+
+    def setUp(self):
+        self.contract = ContractFactory.create()
+
+    def tearDown(self):
+        self.contract.delete()
+
+    def test_delete_contract(self):
+        """Test deleting the contract."""
+        response = self.client.post(
+            reverse(
+                "contracts:contract_delete",
+                kwargs={"pk": self.contract.pk},
+            )
+        )
+
+        # Check redirect
+        self.assertRedirects(response, reverse("contracts:contracts_list"))
+        # Check that there is no data for the old primary key
+        not_existing_ads = Contract.objects.filter(pk=self.contract.pk).first()
+        self.assertIsNone(not_existing_ads)
