@@ -6,6 +6,7 @@ from .views import (
     LeadDetailView,
     LeadsListView,
     LeadUpdateView,
+    CustomersListView,
 )
 
 app_name = "clients"
@@ -16,4 +17,5 @@ urlpatterns = [
     path("leads/<int:pk>/", LeadDetailView.as_view(), name="leads_detail"),
     path("leads/<int:pk>/edit/", LeadUpdateView.as_view(), name="leads_edit"),
     path("leads/<int:pk>/delete/", LeadDeleteView.as_view(), name="leads_delete"),
+    path("customers/", CustomersListView.as_view(), name="customers_list"),
 ]
