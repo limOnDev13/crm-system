@@ -9,23 +9,30 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from os import getenv
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(encoding='utf-8')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o!9+fvm4_s@dr6!1(m$p9!*+h)jv8_-#&rz#&1&jrm5(5bo19$'
+# SECRET_KEY = 'django-insecure-o!9+fvm4_s@dr6!1(m$p9!*+h)jv8_-#&rz#&1&jrm5(5bo19$'
+SECRET_KEY = getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv("DJANGO_DEBUG", "0") == "1"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+
+] + getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
@@ -42,6 +49,7 @@ INSTALLED_APPS = [
     'services.apps.ServicesConfig',
     'advertising.apps.AdvertisingConfig',
     'clients.apps.ClientsConfig',
+    "contracts.apps.ContractsConfig",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +72,7 @@ TEMPLATES = [
             BASE_DIR / 'services' / 'templates',
             BASE_DIR / 'advertising' / 'templates',
             BASE_DIR / 'clients' / 'templates',
+            BASE_DIR / 'contracts' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -82,11 +91,16 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+DATABASE_DIR = BASE_DIR / "database"
+DATABASE_DIR.mkdir(exist_ok=True)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('POSTGRES_DB', 'db'),
+        'USER': getenv('POSTGRES_USER', 'user'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD', 'password'),
+        'HOST': getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': getenv('POSTGRES_PORT', 5432),
     }
 }
 
@@ -124,12 +138,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+STATICFILES_DIRS = []
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'upload'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGLEVEL = getenv("DJANGO_LOGLEVEL", "info").upper()

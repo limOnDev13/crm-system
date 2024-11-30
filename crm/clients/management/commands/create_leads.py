@@ -18,7 +18,7 @@ class Command(BaseCommand):
         for num in range(count):
             lead = LeadFactory.create()
             self.stdout.write(
-                f"Create #{num} advertising:\n"
+                f"Create #{num} lead:\n"
                 f"pk={lead.pk} first name={lead.first_name} "
                 f"second name={lead.second_name} phone={lead.phone} "
                 f"email={lead.email}\n"

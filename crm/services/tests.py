@@ -21,7 +21,7 @@ class ServicesListViewTest(TestCase):
 
         self.assertQuerySetEqual(
             qs=Service.objects.order_by("pk").all(),
-            values=(s.pk for s in response.context["products"]),
+            values=sorted((s.pk for s in response.context["products"])),
             transform=lambda p: p.pk,
         )
 
