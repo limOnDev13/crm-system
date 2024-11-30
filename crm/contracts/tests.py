@@ -78,3 +78,47 @@ class ContractCreateViewTest(TestCase):
 
         self.assertRedirects(response, reverse("contracts:contracts_list"))
         self.assertTrue(self.qs.exists())
+
+
+class ContractUpdateViewTest(TestCase):
+    """Test case class for testing ContractUpdateView."""
+
+    def setUp(self):
+        self.contract = ContractFactory.create()
+
+    def tearDown(self):
+        self.contract.delete()
+
+    def test_update_contract(self):
+        """Test updating the ads."""
+        updated_contract = ContractFactory.build()
+        updated_product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "contracts:contract_edit",
+                kwargs={"pk": self.contract.pk},
+            ),
+            {
+                "name": updated_contract.name,
+                "product": updated_product.pk,
+                "doc": updated_contract.doc,
+                "end_date": updated_contract.end_date,
+                "cost": updated_contract.cost,
+            },
+        )
+
+        # Check redirect
+        self.assertRedirects(
+            response,
+            reverse(
+                "contracts:contract_detail",
+                kwargs={"pk": self.contract.pk},
+            ),
+        )
+        # Check that the old primary key contains updated data
+        contract_: Contract = Contract.objects.filter(pk=self.contract.pk).first()
+        self.assertEqual(contract_.name, updated_contract.name)
+        self.assertEqual(contract_.product.pk, updated_product.pk)
+        self.assertEqual(contract_.end_date, updated_contract.end_date)
+        self.assertEqual(float(contract_.cost), updated_contract.cost)
