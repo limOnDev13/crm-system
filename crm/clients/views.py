@@ -7,7 +7,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .models import Lead, Customer
+from .models import Customer, Lead
 
 
 class LeadsListView(ListView):
@@ -59,3 +59,10 @@ class CustomersListView(ListView):
     template_name = "clients/customers-list.html"
     queryset = Customer.objects.select_related("lead").select_related("contract")
     context_object_name = "customers"
+
+
+class CustomerDetailView(DetailView):
+    """DetailView class for getting details about the customer."""
+
+    template_name = "clients/customers-detail.html"
+    queryset = Customer.objects.select_related("lead").select_related("contract")
