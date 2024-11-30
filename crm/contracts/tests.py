@@ -1,10 +1,12 @@
 from typing import Optional
+from datetime import date, timedelta
 import os
 
 from advertising.factories import ServiceFactory
 from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from .factories import ContractFactory
 from .models import Contract
@@ -17,6 +19,30 @@ def _clear_test_files():
     for filename in files:
         file_path = path / filename
         os.remove(file_path)
+
+
+class ContractTestCase(TestCase):
+    """Test case class for testing model Contract."""
+    def setUp(self):
+        self.contract_data = ContractFactory.build()
+        self.product = ServiceFactory.create()
+
+    def tearDown(self):
+        self.product.delete()  # The contract will be deleted in a cascade
+
+        _clear_test_files()
+
+    def test_create_expired_contract(self):
+        """Negative test - create an expired contract."""
+        with self.assertRaises(ValidationError):
+            expired_contract: Contract = Contract(
+                name=self.contract_data.name,
+                product=self.product,
+                doc=self.contract_data.doc,
+                end_date=date.today() - timedelta(days=1),
+                cost=self.contract_data.cost,
+            )
+            expired_contract.full_clean()
 
 
 class ContractsListViewTest(TestCase):
