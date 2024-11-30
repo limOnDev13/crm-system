@@ -1,7 +1,10 @@
+import random
+
 import factory.fuzzy
 from advertising.factories import AdvertisingFactory
+from contracts.factories import ContractFactory
 
-from .models import Lead
+from .models import Lead, Customer
 
 
 class LeadFactory(factory.django.DjangoModelFactory):
@@ -9,10 +12,21 @@ class LeadFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Lead
-        django_get_or_create = ("first_name", "second_name", "phone", "email", "ads")
+        django_get_or_create = ("first_name", "last_name", "phone", "email", "ads")
 
     first_name = factory.faker.Faker("first_name")
-    second_name = factory.faker.Faker("last_name")
-    phone = factory.Sequence(lambda n: f"+7 (999) 000 {n:04d}")
+    last_name = factory.faker.Faker("last_name")
+    phone = factory.LazyAttribute(lambda n: f"+7 (999) 000 {random.randint(0, 1000):04d}")
     email = factory.faker.Faker("email")
     ads = factory.SubFactory(AdvertisingFactory)
+
+
+class CustomerFactory(factory.django.DjangoModelFactory):
+    """Customer factory."""
+
+    class Meta:
+        model = Customer
+        django_get_or_create = "lead", "contract"
+
+    lead = factory.SubFactory(LeadFactory)
+    contract = factory.SubFactory(ContractFactory)
