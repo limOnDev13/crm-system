@@ -7,7 +7,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .models import Lead
+from .models import Lead, Customer
 
 
 class LeadsListView(ListView):
@@ -51,3 +51,11 @@ class LeadCreateView(CreateView):
     model = Lead
     fields = "first_name", "second_name", "phone", "email", "ads"
     success_url = reverse_lazy("clients:leads_list")
+
+
+class CustomersListView(ListView):
+    """ListView class for getting a list of customers."""
+
+    template_name = "clients/customers-list.html"
+    queryset = Customer.objects.select_related("lead").select_related("contract")
+    context_object_name = "customers"
