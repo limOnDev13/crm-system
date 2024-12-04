@@ -150,4 +150,23 @@ MEDIA_ROOT = BASE_DIR / 'upload'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGLEVEL = getenv("DJANGO_LOGLEVEL", "info").upper()
+LOGLEVEL = getenv("DJANGO_LOGLEVEL", "debug").upper()
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        }
+    },
+    "root": {
+        "handlers": ["console",],
+        "level": "DEBUG",
+    },
+}
