@@ -1,6 +1,8 @@
 from django.urls import path
 
 from .views import (
+    CustomerCreateView,
+    CustomerDeleteView,
     CustomerDetailView,
     CustomersListView,
     LeadCreateView,
@@ -8,6 +10,7 @@ from .views import (
     LeadDetailView,
     LeadsListView,
     LeadUpdateView,
+    update_customer,
 )
 
 app_name = "clients"
@@ -20,4 +23,11 @@ urlpatterns = [
     path("leads/<int:pk>/delete/", LeadDeleteView.as_view(), name="leads_delete"),
     path("customers/", CustomersListView.as_view(), name="customers_list"),
     path("customers/<int:pk>/", CustomerDetailView.as_view(), name="customers_detail"),
+    path("customers/<int:pk>/edit/", update_customer, name="customers_edit"),
+    path(
+        "customers/<int:pk>/delete/",
+        CustomerDeleteView.as_view(),
+        name="customers_delete",
+    ),
+    path("customers/new/", CustomerCreateView.as_view(), name="customers_new"),
 ]
