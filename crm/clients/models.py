@@ -22,6 +22,9 @@ class Lead(models.Model):
         " lead learned about the service",
     )
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}({self.pk})"
+
 
 class Customer(models.Model):
     """ORM view of the customer (potential clients) table."""
