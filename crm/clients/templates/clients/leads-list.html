@@ -11,6 +11,9 @@
             {% for lead in leads %}
             <li class="list-group-item list-group-item-light d-flex justify-content-between">
                 <a href="/leads/{{ lead.pk }}" class="text-decoration-none link-dark">{{ lead.last_name }} {{ lead.first_name }}</a>
+                {% if lead.pk not in customers_pk %}
+                <a href="/customers/new/{{ lead.pk }}" class="btn btn-primary">Сделать активным</a>
+                {% endif %}
                 <a href="/leads/{{ lead.pk }}/delete" class="btn btn-danger">Удалить</a>
             </li>
             {% endfor %}
