@@ -80,7 +80,10 @@ class CustomerBaseForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        contract_name: str = cleaned_data["name"]
+        contract_name: Optional[str] = cleaned_data.get("name")
+        if not contract_name:
+            return cleaned_data
+
         end_date: date = cleaned_data["end_date"]
         error_msgs: List[str] = []
 
