@@ -1,20 +1,33 @@
-from typing import Any, Dict, Tuple
+from datetime import date
+from typing import Any, Dict, List, Optional, Tuple
 
 from advertising.models import Advertising
-from clients.validators import validate_phone
+from contracts.models import Contract
 from django import forms
+from django.forms import ValidationError
 from services.models import Service
 
+from .validators import (
+    validate_phone_format,
+    validate_unique_contract_name,
+    validate_unique_email,
+    validate_unique_phone,
+)
 
-class CustomerForm(forms.Form):
-    """Form class for customers."""
+
+class CustomerBaseForm(forms.Form):
+    """
+    Base form class for customers.
+
+    The form is used to create an active client from a potential one.
+    """
 
     first_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput)
     last_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput)
     phone = forms.CharField(
         max_length=20,
         required=True,
-        validators=[validate_phone],
+        validators=[validate_phone_format],
         widget=forms.TextInput,
     )
     email = forms.EmailField(widget=forms.EmailInput)
@@ -28,6 +41,7 @@ class CustomerForm(forms.Form):
         required=True,
         help_text="the unique name of the contract",
         widget=forms.TextInput,
+        validators=[validate_unique_contract_name],
     )
     product = forms.ModelChoiceField(
         queryset=Service.objects.all(),
@@ -63,3 +77,63 @@ class CustomerForm(forms.Form):
             "cost": self.cleaned_data["cost"],
         }
         return lead_data, contract_data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        contract_name: str = cleaned_data["name"]
+        end_date: date = cleaned_data["end_date"]
+        error_msgs: List[str] = []
+
+        contract: Optional[Contract] = Contract.objects.filter(
+            name=contract_name
+        ).first()
+        if contract is None:
+            start_date: date = date.today()
+        else:
+            start_date = contract.start_date
+
+        if start_date >= end_date:
+            error_msgs.append(
+                f"The end date must not be less than the start date ({start_date})."
+            )
+
+        if error_msgs:
+            raise ValidationError(" & ".join(error_msgs))
+        return cleaned_data
+
+
+class NewCustomerForm(CustomerBaseForm):
+    """
+    Form for creating a new active client.
+
+    The phone field has validators for uniqueness and the correct format;
+     the email field has a validator for uniqueness
+    """
+
+    phone = forms.CharField(
+        max_length=20,
+        required=True,
+        validators=[validate_unique_phone, validate_phone_format],
+        widget=forms.TextInput,
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput, validators=[validate_unique_email]
+    )
+
+
+class CustomerUpdateForm(CustomerBaseForm):
+    """
+    Form for updating the active client.
+
+    The name field has not validators;
+     the email field has not validators
+    """
+
+    name = forms.CharField(
+        max_length=100,
+        required=True,
+        help_text="the unique name of the contract",
+        widget=forms.TextInput,
+        validators=[],
+    )
+    email = forms.EmailField(widget=forms.EmailInput, validators=[])
