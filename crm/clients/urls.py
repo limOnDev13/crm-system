@@ -10,6 +10,7 @@ from .views import (
     LeadDetailView,
     LeadsListView,
     LeadUpdateView,
+    create_customer_from_lead,
     update_customer,
 )
 
@@ -30,4 +31,9 @@ urlpatterns = [
         name="customers_delete",
     ),
     path("customers/new/", CustomerCreateView.as_view(), name="customers_new"),
+    path(
+        "customers/new/<int:lead_pk>/",
+        create_customer_from_lead,
+        name="customers_from_lead",
+    ),
 ]
