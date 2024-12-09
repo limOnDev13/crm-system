@@ -1,8 +1,10 @@
 from logging import getLogger
+from typing import Any, Dict, List
 
 from contracts.models import Contract
+from django.db import IntegrityError, transaction
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -13,8 +15,9 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import CustomerForm
+from .forms import CustomerBaseForm, CustomerUpdateForm, NewCustomerForm
 from .models import Customer, Lead
+from .utils import integrity_error_parser
 
 logger = getLogger()
 
@@ -25,6 +28,19 @@ class LeadsListView(ListView):
     template_name = "clients/leads-list.html"
     queryset = Lead.objects.select_related("ads")
     context_object_name = "leads"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context: Dict[str, Any] = super().get_context_data(
+            object_list=object_list, **kwargs
+        )
+        leads_pk: List[int] = [
+            pk[0]
+            for pk in Customer.objects.select_related("lead")
+            .values_list("lead__pk")
+            .all()
+        ]
+        context["customers_pk"] = leads_pk
+        return context
 
 
 class LeadDetailView(DetailView):
@@ -39,7 +55,7 @@ class LeadUpdateView(UpdateView):
 
     template_name = "clients/leads-edit.html"
     model = Lead
-    fields = "first_name", "second_name", "phone", "email", "ads"
+    fields = "first_name", "last_name", "phone", "email", "ads"
 
     def get_success_url(self):
         return reverse("clients:leads_detail", kwargs={"pk": self.object.pk})
@@ -58,7 +74,7 @@ class LeadCreateView(CreateView):
 
     template_name = "clients/leads-create.html"
     model = Lead
-    fields = "first_name", "second_name", "phone", "email", "ads"
+    fields = "first_name", "last_name", "phone", "email", "ads"
     success_url = reverse_lazy("clients:leads_list")
 
 
@@ -82,13 +98,13 @@ class CustomerCreateView(FormView):
 
     template_name = "clients/customers-create.html"
     success_url = reverse_lazy("clients:customers_list")
-    form_class = CustomerForm
+    form_class = NewCustomerForm
 
-    def form_valid(self, form: CustomerForm):
+    def form_valid(self, form: NewCustomerForm):
         resp = super().form_valid(form)
         lead_data, contract_data = form.get_data_from_customer_form()
 
-        lead = Lead.objects.create(**lead_data)
+        lead, _ = Lead.objects.get_or_create(**lead_data)
         contract = Contract.objects.create(**contract_data)
         Customer.objects.create(lead=lead, contract=contract)
 
@@ -106,30 +122,35 @@ class CustomerDeleteView(DeleteView):
 def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
     """View func for updating the customer."""
     if request.method == "POST":
-        form = CustomerForm(request.POST, request.FILES)
+        form = CustomerUpdateForm(request.POST, request.FILES)
         if form.is_valid():
             lead_data, contract_data = form.get_data_from_customer_form()
             customer = Customer.objects.get(pk=pk)
             lead = customer.lead
             contract = customer.contract
 
-            for key, value in lead_data.items():
-                setattr(lead, key, value)
-            for key, value in contract_data.items():
-                setattr(contract, key, value)
+            try:
+                with transaction.atomic():
+                    for key, value in lead_data.items():
+                        setattr(lead, key, value)
+                    for key, value in contract_data.items():
+                        setattr(contract, key, value)
 
-            customer.lead.save()
-            customer.contract.save()
+                    customer.lead.save()
+                    customer.contract.save()
+            except IntegrityError as exc:
+                field_name, exc_text = integrity_error_parser(exc, form)
+                form.add_error(field_name, exc_text)
+                context = {"form": form, "object": customer}
+                return render(request, "clients/customers-edit.html", context=context)
 
             url = reverse("clients:customers_detail", kwargs={"pk": pk})
             return redirect(url)
 
-        return redirect(request.path)
-
     customer = (
         Customer.objects.select_related("lead").select_related("contract").get(pk=pk)
     )
-    form = CustomerForm(
+    form = CustomerUpdateForm(
         initial={
             "first_name": customer.lead.first_name,
             "last_name": customer.lead.last_name,
@@ -145,3 +166,37 @@ def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
     )
     context = {"form": form, "object": customer}
     return render(request, "clients/customers-edit.html", context=context)
+
+
+def create_customer_from_lead(request: HttpRequest, lead_pk: int) -> HttpResponse:
+    """View func for updating the customer."""
+    lead = get_object_or_404(Lead, pk=lead_pk)
+
+    if request.method == "POST":
+        form = CustomerBaseForm(request.POST, request.FILES)
+        if form.is_valid():
+            lead_data, contract_data = form.get_data_from_customer_form()
+
+            for key, value in lead_data.items():
+                setattr(lead, key, value)
+            lead.save()
+            contract = Contract.objects.create(**contract_data)
+            customer = Customer.objects.create(lead=lead, contract=contract)
+
+            url = reverse("clients:customers_detail", kwargs={"pk": customer.pk})
+            return redirect(url)
+
+    if lead is not None:
+        form = CustomerBaseForm(
+            initial={
+                "first_name": lead.first_name,
+                "last_name": lead.last_name,
+                "phone": lead.phone,
+                "email": lead.email,
+                "ads": lead.ads,
+            }
+        )
+    else:
+        form = CustomerBaseForm()
+    context = {"form": form, "object": lead}
+    return render(request, "clients/customers-create-from-lead.html", context=context)
