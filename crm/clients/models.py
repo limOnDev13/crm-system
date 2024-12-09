@@ -2,8 +2,6 @@ from advertising.models import Advertising
 from contracts.models import Contract
 from django.db import models
 
-from .validators import validate_phone
-
 
 class Lead(models.Model):
     """ORM view of the Lead (potential clients) table."""
@@ -11,7 +9,10 @@ class Lead(models.Model):
     first_name = models.CharField(max_length=100, null=False, blank=False)
     last_name = models.CharField(max_length=100, null=False, blank=False)
     phone = models.CharField(
-        max_length=20, null=False, blank=False, unique=True, validators=[validate_phone]
+        max_length=20,
+        null=False,
+        blank=False,
+        unique=True,
     )
     email = models.EmailField(null=False, unique=True)
     ads = models.ForeignKey(
