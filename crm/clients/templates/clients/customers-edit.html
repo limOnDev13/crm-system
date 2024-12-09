@@ -7,7 +7,13 @@
     <div class="col">
         <form method="POST" action="/customers/{{ object.pk }}/edit/" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div style="color: #ff0000">{{form.non_field_errors}}</div>
+            {% for field in form %}
+            <p>{{field.label_tag}} {{field}} {{field.help_text}}</p>
+                {% for error in field.errors %}
+                    <p style="color: #ff0000">{{error}}</p>
+                {% endfor %}
+            {% endfor %}
             <button type="submit" class="btn btn-primary">Применить</button>
         </form>
     </div>
