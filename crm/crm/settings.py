@@ -163,11 +163,11 @@ LOGGING = {
     "loggers": {
         "": {
             "handlers": ["console"],
-            "level": "DEBUG",
-        }
+            "level": "WARNING",
+        },
     },
     "root": {
         "handlers": ["console",],
-        "level": "DEBUG",
+        "level": "WARNING",
     },
 }
