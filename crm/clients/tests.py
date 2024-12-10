@@ -499,3 +499,25 @@ class CustomerCreateViewTest(TestCase):
             None,
             f"The end date must not be less than the start date ({self.contract.start_date})."
         )
+
+
+class CustomersListViewTest(TestCase):
+    """Test case class for testing CustomersListView."""
+
+    fixtures = [
+        "services-fixtures.json",
+        "ads-fixtures.json",
+        "leads-fixtures.json",
+        "customers-fixtures.json",
+        "contracts-fixtures.json",
+    ]
+
+    def test_get_list_customers(self):
+        """Test getting list of customers"""
+        response = self.client.get(reverse("clients:customers_list"))
+
+        self.assertQuerySetEqual(
+            qs=Customer.objects.order_by("pk").all(),
+            values=(s.pk for s in response.context["customers"]),
+            transform=lambda p: p.pk,
+        )
