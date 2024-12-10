@@ -11,7 +11,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from services.factories import ServiceFactory
-from .factories import LeadFactory
+from .factories import LeadFactory, CustomerFactory
 from .models import Lead, Customer
 from .forms import NewCustomerForm
 
@@ -521,3 +521,46 @@ class CustomersListViewTest(TestCase):
             values=(s.pk for s in response.context["customers"]),
             transform=lambda p: p.pk,
         )
+
+
+class CustomerDeleteViewTest(TestCase):
+    """Test case class for testing CustomerDeleteView."""
+
+    def setUp(self):
+        self.customer = CustomerFactory.create()
+
+    def tearDown(self):
+        self.customer.delete()
+
+    def test_delete_customer(self):
+        """Test deleting the customer."""
+        response = self.client.post(
+            reverse(
+                "clients:customers_delete",
+                kwargs={"pk": self.customer.pk},
+            )
+        )
+
+        # Check redirect
+        self.assertRedirects(response, reverse("clients:customers_list"))
+        # Check that there is no data for the old primary key
+        not_existing_ads = Customer.objects.filter(pk=self.customer.pk).first()
+        self.assertIsNone(not_existing_ads)
+
+
+class CustomerDetailViewTest(TestCase):
+    """Test case class for testing CustomerDetailView."""
+
+    def setUp(self):
+        self.customer = CustomerFactory.create()
+
+    def tearDown(self):
+        self.customer.delete()
+
+    def test_get_details_about_customer(self):
+        """Test getting details about the customer."""
+        response = self.client.get(
+            reverse("clients:customers_detail", kwargs={"pk": self.customer.pk})
+        )
+
+        self.assertEqual(response.status_code, 200)
