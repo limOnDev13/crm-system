@@ -5,53 +5,36 @@ workflow:
 image: python:3.12
 
 stages:
-    - build
     - linters
     - test
 
-build-req:
-    stage: build
-    script:
-        - pip install -r requirements_dev.txt
-    artifacts:
-        paths:
-            - ./
-        expire_in: 1 hour
+before_script:
+    - pip install -r requirements_dev.txt
 
 black:
     stage: linters
     script:
         - python3 -m black --diff --check .
-    dependencies:
-        - build-req
 
 isort:
     stage: linters
     script:
         - python3 -m isort --check-only --diff --profile black .
-    dependencies:
-        - build-req
 
 flake8:
     stage: linters
     script:
         - python3 -m flake8 .
-    dependencies:
-        - build-req
 
 mypy:
     stage: linters
     script:
         - python3 -m mypy .
-    dependencies:
-        - build-req
 
 unittest:
     stage: test
     services:
         - postgres:13.3
-    dependencies:
-        - build-req
     script:
         - cd crm
         - python3 manage.py test
