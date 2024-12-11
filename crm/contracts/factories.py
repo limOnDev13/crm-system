@@ -4,13 +4,14 @@ from datetime import date, timedelta
 from typing import Optional
 
 import factory.fuzzy
+from django.conf import settings
 from services.factories import ServiceFactory
 
 from .models import Contract
 
 
 def _create_test_file(
-    *, file_dir: Optional[str] = None, filename: str = "test_file.txt"
+    *, file_dir: Optional[str] = settings.BASE_DIR / "upload", filename: str = "test_file.txt"
 ) -> str:
     """Create empty file for factory."""
     if not file_dir:
