@@ -7,8 +7,8 @@ from django import forms
 from django.forms import ValidationError
 from services.models import Service
 
+from .models import validate_phone_format
 from .validators import (
-    validate_phone_format,
     validate_unique_contract_name,
     validate_unique_email,
     validate_unique_phone,
