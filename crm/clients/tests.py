@@ -865,3 +865,200 @@ class UpdateCustomerTest(TestCase):
             .first()
         )
         self.assertTrue(customer.contract.end_date != past_end_date)
+
+
+class CreateCustomerFromLeadTest(TestCase):
+    """Test case class for testing view func create_customer_from_lead."""
+
+    def setUp(self):
+        self.lead = LeadFactory.create()
+        self.product = ServiceFactory.create()
+        self.contract_data = ContractFactory.build()
+        self.contract_qs = Contract.objects.filter(
+            name=self.contract_data.name,
+        )
+        self.customer_qs = Customer.objects.filter(lead=self.lead)
+
+        # Check that the object is being created in the test
+        self.customer_qs.delete()
+        self.contract_qs.delete()
+
+        self.contract: Optional[Contract] = None
+        self.request_kwargs: Dict[str, Any] = {
+            "first_name": self.lead.first_name,
+            "last_name": self.lead.last_name,
+            "phone": self.lead.phone,
+            "email": self.lead.email,
+            "ads": self.lead.ads.pk,
+            "name": self.contract_data.name,
+            "product": self.product.pk,
+            "doc": self.contract_data.doc,
+            "end_date": self.contract_data.end_date,
+            "cost": self.contract_data.cost,
+        }
+
+    def tearDown(self):
+        if self.lead:
+            self.lead.delete()
+        if self.contract:
+            self.contract.delete()
+        # the customer is deleted cascadingly
+
+    def test_create_customer_from_lead(self):
+        """Test creating a new customer from the lead."""
+        response = self.client.post(
+            reverse(
+                "clients:customers_from_lead",
+                kwargs={"lead_pk": self.lead.pk},
+            ),
+            self.request_kwargs,
+        )
+
+        self.assertRedirects(response, reverse("clients:customers_list"))
+        self.assertTrue(self.customer_qs.exists())
+        self.assertTrue(self.contract_qs.exists())
+        self.contract = self.contract_qs.first()
+        self.assertTrue(
+            Customer.objects.filter(lead=self.lead, contract=self.contract).exists()
+        )
+
+    # def test_creating_customer_with_invalid_phone(self):
+    #     """Negative test of creating a customer with an invalid phone."""
+    #     kwargs = deepcopy(self.request_kwargs)
+    #     kwargs["phone"] = "".join(
+    #         random.choices(ascii_letters, k=random.randint(1, 10))
+    #     )
+    #     response = self.client.post(
+    #         reverse("clients:customers_new"),
+    #         kwargs,
+    #     )
+    #     form: NewCustomerForm = response.context["form"]
+    #     self.assertFormError(form, "phone", "Phone must have format +7 (999) 000 0000")
+    #
+    # def test_creating_customer_with_identical_phones(self):
+    #     """Negative test of creating a customer with an existing phone."""
+    #     self.client.post(
+    #         reverse("clients:customers_new"),
+    #         self.request_kwargs,
+    #     )
+    #     self.lead = self.lead_qs.first()
+    #     self.contract = self.contract_qs.first()
+    #
+    #     # try creating second customer with identical phone
+    #     second_lead_data = LeadFactory.build()
+    #     second_contract_data = ContractFactory.build()
+    #     response = self.client.post(
+    #         reverse("clients:customers_new"),
+    #         {
+    #             "first_name": second_lead_data.first_name,
+    #             "last_name": second_lead_data.last_name,
+    #             "phone": self.lead_data.phone,
+    #             "email": second_lead_data.email,
+    #             "ads": self.ads.pk,
+    #             "name": second_contract_data.name,
+    #             "product": self.product.pk,
+    #             "doc": second_contract_data.doc,
+    #             "end_date": second_contract_data.end_date,
+    #             "cost": second_contract_data.cost,
+    #         },
+    #     )
+    #     form: NewCustomerForm = response.context["form"]
+    #     self.assertFormError(form, "phone", "Phone already exists")
+    #
+    # def test_creating_customer_with_identical_emails(self):
+    #     """Negative test of creating a customer with an existing email."""
+    #     self.client.post(
+    #         reverse("clients:customers_new"),
+    #         self.request_kwargs,
+    #     )
+    #     self.lead = self.lead_qs.first()
+    #     self.contract = self.contract_qs.first()
+    #
+    #     # try creating second customer with identical email
+    #     second_lead_data = LeadFactory.build()
+    #     second_contract_data = ContractFactory.build()
+    #     response = self.client.post(
+    #         reverse("clients:customers_new"),
+    #         {
+    #             "first_name": second_lead_data.first_name,
+    #             "last_name": second_lead_data.last_name,
+    #             "phone": second_lead_data.phone,
+    #             "email": self.lead_data.email,
+    #             "ads": self.ads.pk,
+    #             "name": second_contract_data.name,
+    #             "product": self.product.pk,
+    #             "doc": second_contract_data.doc,
+    #             "end_date": second_contract_data.end_date,
+    #             "cost": second_contract_data.cost,
+    #         },
+    #     )
+    #     form: NewCustomerForm = response.context["form"]
+    #     self.assertFormError(form, "email", "Email already exists")
+    #
+    # def test_creating_customer_with_identical_contract_names(self):
+    #     """Negative test of creating a customer with an existing contract name."""
+    #     self.client.post(
+    #         reverse("clients:customers_new"),
+    #         self.request_kwargs,
+    #     )
+    #     self.lead = self.lead_qs.first()
+    #     self.contract = self.contract_qs.first()
+    #
+    #     # try creating second customer with identical contract name
+    #     second_lead_data = LeadFactory.build()
+    #     second_contract_data = ContractFactory.build()
+    #     response = self.client.post(
+    #         reverse("clients:customers_new"),
+    #         {
+    #             "first_name": second_lead_data.first_name,
+    #             "last_name": second_lead_data.last_name,
+    #             "phone": second_lead_data.phone,
+    #             "email": second_lead_data.email,
+    #             "ads": self.ads.pk,
+    #             "name": self.contract_data.name,
+    #             "product": self.product.pk,
+    #             "doc": second_contract_data.doc,
+    #             "end_date": second_contract_data.end_date,
+    #             "cost": second_contract_data.cost,
+    #         },
+    #     )
+    #     form: NewCustomerForm = response.context["form"]
+    #     self.assertFormError(form, "name", "Contract name already exists")
+    #
+    # def test_creating_customer_with_invalid_end_date(self):
+    #     """Negative test of creating a customer with an invalid end date."""
+    #     self.client.post(
+    #         reverse("clients:customers_new"),
+    #         self.request_kwargs,
+    #     )
+    #     self.lead = self.lead_qs.first()
+    #     self.contract = self.contract_qs.first()
+    #     if self.contract is None:
+    #         self.fail("self.contract is None...")
+    #     else:
+    #         # try creating second customer with identical contract name
+    #         second_lead_data = LeadFactory.build()
+    #         second_contract_data = ContractFactory.build()
+    #         response = self.client.post(
+    #             reverse("clients:customers_new"),
+    #             {
+    #                 "first_name": second_lead_data.first_name,
+    #                 "last_name": second_lead_data.last_name,
+    #                 "phone": second_lead_data.phone,
+    #                 "email": second_lead_data.email,
+    #                 "ads": self.ads.pk,
+    #                 "name": second_contract_data.name,
+    #                 "product": self.product.pk,
+    #                 "doc": second_contract_data.doc,
+    #                 "end_date": self.contract.start_date
+    #                 - timedelta(days=random.randint(1, 10)),
+    #                 "cost": second_contract_data.cost,
+    #             },
+    #         )
+    #         form: NewCustomerForm = response.context["form"]
+    #         self.assertFormError(
+    #             form,
+    #             None,
+    #             f"The end date must not be less than the start date"
+    #             f" ({self.contract.start_date}).",
+    #         )
