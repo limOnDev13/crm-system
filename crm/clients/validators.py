@@ -1,19 +1,9 @@
-import re
 from typing import Optional
 
 from contracts.models import Contract
 from django.core.exceptions import ValidationError
 
 from .models import Lead
-
-
-def validate_phone_format(value: str) -> None:
-    """Validate phone format (must be like +7 (999) 000 0000)."""
-    # phone must have format +7 (999) 000 0000
-    if not re.match(r"\+7 \(\d{3}?\) \d{3}? \d{4}?", value):
-        raise ValidationError(
-            "Phone must have format +7 (999) 000 0000", params={"phone": value}
-        )
 
 
 def validate_unique_phone(value: str) -> None:
