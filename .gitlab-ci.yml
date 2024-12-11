@@ -42,8 +42,6 @@ unittest:
     services:
         - postgres
     script:
-        - export PGPASSWORD=$POSTGRES_PASSWORD
-        - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
         - cd crm
         - python3 manage.py test
     variables:
