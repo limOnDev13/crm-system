@@ -182,9 +182,9 @@ def create_customer_from_lead(request: HttpRequest, lead_pk: int) -> HttpRespons
                 setattr(lead, key, value)
             lead.save()
             contract = Contract.objects.create(**contract_data)
-            customer = Customer.objects.create(lead=lead, contract=contract)
+            Customer.objects.create(lead=lead, contract=contract)
 
-            url = reverse("clients:customers_detail", kwargs={"pk": customer.pk})
+            url = reverse("clients:customers_list")
             return redirect(url)
 
     if lead is not None:
