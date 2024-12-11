@@ -42,3 +42,10 @@ unittest:
     script:
         - cd crm
         - python3 manage.py test
+    services:
+        - postgres
+    variables:
+        POSTGRES_DB: $POSTGRES_DB
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+        POSTGRES_HOST_AUTH_METHOD: trust
