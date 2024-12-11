@@ -922,6 +922,45 @@ class CreateCustomerFromLeadTest(TestCase):
             Customer.objects.filter(lead=self.lead, contract=self.contract).exists()
         )
 
+    def test_create_customer_from_lead_with_updating_lead(self):
+        """Test for creating an active user from a lead with changes to the lead data."""
+        updated_lead = LeadFactory.build()
+        new_ads = AdvertisingFactory.create()
+        kwargs = deepcopy(self.request_kwargs)
+        kwargs.update(
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "email": updated_lead.email,
+                "phone": updated_lead.phone,
+                "ads": new_ads.pk,
+            }
+        )
+        response = self.client.post(
+            reverse(
+                "clients:customers_from_lead",
+                kwargs={"lead_pk": self.lead.pk},
+            ),
+            kwargs,
+        )
+
+        self.assertRedirects(response, reverse("clients:customers_list"))
+        self.assertTrue(self.customer_qs.exists())
+        self.assertTrue(self.contract_qs.exists())
+        self.contract = self.contract_qs.first()
+        self.assertTrue(
+            Customer.objects.filter(lead=self.lead, contract=self.contract).exists()
+        )
+        self.lead = Lead.objects.filter(pk=self.lead.pk).first()
+        if self.lead is None:
+            self.fail("self.lead is None...")
+        else:
+            self.assertEqual(self.lead.first_name, updated_lead.first_name)
+            self.assertEqual(self.lead.last_name, updated_lead.last_name)
+            self.assertEqual(self.lead.email, updated_lead.email)
+            self.assertEqual(self.lead.phone, updated_lead.phone)
+            self.assertEqual(self.lead.ads.pk, new_ads.pk)
+
     # def test_creating_customer_with_invalid_phone(self):
     #     """Negative test of creating a customer with an invalid phone."""
     #     kwargs = deepcopy(self.request_kwargs)
