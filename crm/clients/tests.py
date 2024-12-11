@@ -12,7 +12,7 @@ from django.urls import reverse
 from services.factories import ServiceFactory
 
 from .factories import CustomerFactory, LeadFactory
-from .forms import NewCustomerForm
+from .forms import CustomerBaseForm, NewCustomerForm
 from .models import Customer, Lead
 
 
@@ -923,7 +923,8 @@ class CreateCustomerFromLeadTest(TestCase):
         )
 
     def test_create_customer_from_lead_with_updating_lead(self):
-        """Test for creating an active user from a lead with changes to the lead data."""
+        """Test for creating an active user from
+         a lead with changes to the lead data."""
         updated_lead = LeadFactory.build()
         new_ads = AdvertisingFactory.create()
         kwargs = deepcopy(self.request_kwargs)
@@ -961,49 +962,56 @@ class CreateCustomerFromLeadTest(TestCase):
             self.assertEqual(self.lead.phone, updated_lead.phone)
             self.assertEqual(self.lead.ads.pk, new_ads.pk)
 
-    # def test_creating_customer_with_invalid_phone(self):
-    #     """Negative test of creating a customer with an invalid phone."""
-    #     kwargs = deepcopy(self.request_kwargs)
-    #     kwargs["phone"] = "".join(
-    #         random.choices(ascii_letters, k=random.randint(1, 10))
-    #     )
-    #     response = self.client.post(
-    #         reverse("clients:customers_new"),
-    #         kwargs,
-    #     )
-    #     form: NewCustomerForm = response.context["form"]
-    #     self.assertFormError(form, "phone", "Phone must have format +7 (999) 000 0000")
-    #
-    # def test_creating_customer_with_identical_phones(self):
-    #     """Negative test of creating a customer with an existing phone."""
-    #     self.client.post(
-    #         reverse("clients:customers_new"),
-    #         self.request_kwargs,
-    #     )
-    #     self.lead = self.lead_qs.first()
-    #     self.contract = self.contract_qs.first()
-    #
-    #     # try creating second customer with identical phone
-    #     second_lead_data = LeadFactory.build()
-    #     second_contract_data = ContractFactory.build()
-    #     response = self.client.post(
-    #         reverse("clients:customers_new"),
-    #         {
-    #             "first_name": second_lead_data.first_name,
-    #             "last_name": second_lead_data.last_name,
-    #             "phone": self.lead_data.phone,
-    #             "email": second_lead_data.email,
-    #             "ads": self.ads.pk,
-    #             "name": second_contract_data.name,
-    #             "product": self.product.pk,
-    #             "doc": second_contract_data.doc,
-    #             "end_date": second_contract_data.end_date,
-    #             "cost": second_contract_data.cost,
-    #         },
-    #     )
-    #     form: NewCustomerForm = response.context["form"]
-    #     self.assertFormError(form, "phone", "Phone already exists")
-    #
+    def test_creating_customer_from_lead_with_invalid_phone(self):
+        """Negative test of creating a customer with an invalid phone."""
+        kwargs = deepcopy(self.request_kwargs)
+        kwargs["phone"] = "".join(
+            random.choices(ascii_letters, k=random.randint(1, 10))
+        )
+        response = self.client.post(
+            reverse(
+                "clients:customers_from_lead",
+                kwargs={"lead_pk": self.lead.pk},
+            ),
+            kwargs,
+        )
+        form: CustomerBaseForm = response.context["form"]
+        self.assertFormError(form, "phone", "Phone must have format +7 (999) 000 0000")
+        not_existing_contact = self.contract_qs.first()
+        self.assertIsNone(not_existing_contact)
+
+    def test_creating_customer_from_lead_with_identical_phones(self):
+        """Negative test of creating a customer with an existing phone."""
+        second_lead: Lead = LeadFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_from_lead",
+                kwargs={"lead_pk": self.lead.pk},
+            ),
+            {
+                "first_name": self.lead.first_name,
+                "last_name": self.lead.last_name,
+                "phone": second_lead.phone,
+                "email": self.lead.email,
+                "ads": self.lead.ads.pk,
+                "name": self.contract_data.name,
+                "product": self.product.pk,
+                "doc": self.contract_data.doc,
+                "end_date": self.contract_data.end_date,
+                "cost": self.contract_data.cost,
+            },
+        )
+        self.assertContains(
+            response, f"Key (phone)=({second_lead.phone}) already exists."
+        )
+        second_lead.delete()
+
+        not_existing_contract = self.contract_qs.first()
+        self.assertIsNone(not_existing_contract)
+        not_existing_customer = self.customer_qs.first()
+        self.assertIsNone(not_existing_customer)
+
     # def test_creating_customer_with_identical_emails(self):
     #     """Negative test of creating a customer with an existing email."""
     #     self.client.post(
