@@ -591,8 +591,10 @@ class CreateCustomerFromLeadTest(TestCase):
         )
 
     def test_create_customer_from_lead_with_updating_lead(self):
-        """Test for creating an active user from
-        a lead with changes to the lead data."""
+        """
+        Test for creating an active user from
+        a lead with changes to the lead data.
+        """
         updated_lead = LeadFactory.build()
         new_ads = AdvertisingFactory.create()
         kwargs = deepcopy(self.request_kwargs)

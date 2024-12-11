@@ -10,7 +10,7 @@ from .models import Contract
 
 
 def _create_test_file(
-    file_dir: Optional[str] = None, filename: str = "test_file.txt"
+    *, file_dir: Optional[str] = None, filename: str = "test_file.txt"
 ) -> str:
     """Create empty file for factory."""
     if not file_dir:
@@ -33,6 +33,6 @@ class ContractFactory(factory.django.DjangoModelFactory):
 
     name = factory.faker.Faker("word")
     product = factory.SubFactory(ServiceFactory)
-    doc = factory.django.FileField(from_path=_create_test_file())
+    doc = factory.django.FileField(from_path=_create_test_file(file_dir="upload"))
     cost = factory.LazyAttribute(lambda x: round(random.uniform(0, 100), 2))
     end_date = factory.LazyAttribute(lambda x: date.today() + timedelta(days=1))
