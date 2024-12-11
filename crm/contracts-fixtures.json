@@ -3,120 +3,120 @@
     "model": "contracts.contract",
     "pk": 1,
     "fields": {
-      "name": "shake",
-      "product": 1,
-      "doc": "contracts/empty_file_HqEA8Ac.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "94.77"
+      "name": "benefit",
+      "product": 2,
+      "doc": "contracts/test_file.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "38.34"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 2,
     "fields": {
-      "name": "candidate",
-      "product": 2,
-      "doc": "contracts/empty_file_k61fgpS.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "14.48"
+      "name": "nation",
+      "product": 4,
+      "doc": "contracts/test_file_GgbQDH9.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "96.41"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 3,
     "fields": {
-      "name": "much",
-      "product": 3,
-      "doc": "contracts/empty_file_kV2iDLK.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "38.42"
+      "name": "along",
+      "product": 6,
+      "doc": "contracts/test_file_2XU2jDL.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "35.11"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 4,
     "fields": {
-      "name": "college",
-      "product": 4,
-      "doc": "contracts/empty_file_1FD2PtA.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "48.51"
+      "name": "effort",
+      "product": 8,
+      "doc": "contracts/test_file_T3Ak1K3.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "17.20"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 5,
     "fields": {
-      "name": "them",
-      "product": 5,
-      "doc": "contracts/empty_file_n9tGzdA.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "90.76"
+      "name": "child",
+      "product": 10,
+      "doc": "contracts/test_file_4ZqKloT.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "45.52"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 6,
     "fields": {
-      "name": "marriage",
-      "product": 6,
-      "doc": "contracts/empty_file_iR3X7Dp.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "19.75"
+      "name": "seek",
+      "product": 12,
+      "doc": "contracts/test_file_5WZelWA.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "21.47"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 7,
     "fields": {
-      "name": "send",
-      "product": 7,
-      "doc": "contracts/empty_file_dU8nU1P.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "23.86"
+      "name": "discussion",
+      "product": 14,
+      "doc": "contracts/test_file_k5Y14R2.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "42.54"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 8,
     "fields": {
-      "name": "determine",
-      "product": 8,
-      "doc": "contracts/empty_file_ZY6zpGp.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "13.60"
+      "name": "day",
+      "product": 16,
+      "doc": "contracts/test_file_U9jComD.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "30.92"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 9,
     "fields": {
-      "name": "expect",
-      "product": 9,
-      "doc": "contracts/empty_file_deHjxax.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "52.12"
+      "name": "defense",
+      "product": 18,
+      "doc": "contracts/test_file_1y5z1NU.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "47.38"
     }
   },
   {
     "model": "contracts.contract",
     "pk": 10,
     "fields": {
-      "name": "radio",
-      "product": 10,
-      "doc": "contracts/empty_file_SPUoYWt.txt",
-      "start_date": "2024-11-30",
-      "end_date": "2024-12-01",
-      "cost": "98.55"
+      "name": "five",
+      "product": 20,
+      "doc": "contracts/test_file_oUKCwTY.txt",
+      "start_date": "2024-12-09",
+      "end_date": "2024-12-10",
+      "cost": "8.23"
     }
   }
 ]

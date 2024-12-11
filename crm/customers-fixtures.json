@@ -1,0 +1,82 @@
+[
+  {
+    "model": "clients.customer",
+    "pk": 1,
+    "fields": {
+      "lead": 1,
+      "contract": 1
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 2,
+    "fields": {
+      "lead": 2,
+      "contract": 2
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 3,
+    "fields": {
+      "lead": 3,
+      "contract": 3
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 4,
+    "fields": {
+      "lead": 4,
+      "contract": 4
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 5,
+    "fields": {
+      "lead": 5,
+      "contract": 5
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 6,
+    "fields": {
+      "lead": 6,
+      "contract": 6
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 7,
+    "fields": {
+      "lead": 7,
+      "contract": 7
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 8,
+    "fields": {
+      "lead": 8,
+      "contract": 8
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 9,
+    "fields": {
+      "lead": 9,
+      "contract": 9
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 10,
+    "fields": {
+      "lead": 10,
+      "contract": 10
+    }
+  }
+]

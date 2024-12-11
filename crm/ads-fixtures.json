@@ -3,109 +3,109 @@
     "model": "advertising.advertising",
     "pk": 1,
     "fields": {
-      "name": "building",
-      "channel": "word",
-      "budget": "61.71",
-      "product": 11
+      "name": "he",
+      "channel": "country",
+      "budget": "44.50",
+      "product": 1
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 2,
     "fields": {
-      "name": "particular",
-      "channel": "require",
-      "budget": "32.09",
-      "product": 12
+      "name": "expert",
+      "channel": "old",
+      "budget": "10.38",
+      "product": 3
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 3,
     "fields": {
-      "name": "deep",
-      "channel": "phone",
-      "budget": "36.10",
-      "product": 13
+      "name": "else",
+      "channel": "end",
+      "budget": "51.99",
+      "product": 5
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 4,
     "fields": {
-      "name": "face",
-      "channel": "provide",
-      "budget": "80.51",
-      "product": 14
+      "name": "treatment",
+      "channel": "part",
+      "budget": "97.77",
+      "product": 7
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 5,
     "fields": {
-      "name": "realize",
-      "channel": "letter",
-      "budget": "84.16",
-      "product": 15
+      "name": "focus",
+      "channel": "west",
+      "budget": "28.83",
+      "product": 9
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 6,
     "fields": {
-      "name": "owner",
-      "channel": "us",
-      "budget": "66.47",
-      "product": 16
+      "name": "agreement",
+      "channel": "various",
+      "budget": "95.61",
+      "product": 11
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 7,
     "fields": {
-      "name": "size",
-      "channel": "think",
-      "budget": "76.80",
-      "product": 17
+      "name": "carry",
+      "channel": "choose",
+      "budget": "45.44",
+      "product": 13
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 8,
     "fields": {
-      "name": "response",
-      "channel": "technology",
-      "budget": "43.28",
-      "product": 18
+      "name": "source",
+      "channel": "evidence",
+      "budget": "85.16",
+      "product": 15
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 9,
     "fields": {
-      "name": "man",
-      "channel": "push",
-      "budget": "80.29",
-      "product": 19
+      "name": "education",
+      "channel": "prevent",
+      "budget": "44.67",
+      "product": 17
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 10,
     "fields": {
-      "name": "behavior",
-      "channel": "daughter",
-      "budget": "35.16",
-      "product": 20
+      "name": "firm",
+      "channel": "organization",
+      "budget": "64.53",
+      "product": 19
     }
   },
   {
     "model": "advertising.advertising",
     "pk": 11,
     "fields": {
-      "name": "agreement",
-      "channel": "camera",
-      "budget": "47.01",
+      "name": "leave",
+      "channel": "professor",
+      "budget": "7.31",
       "product": 21
     }
   },
@@ -113,9 +113,9 @@
     "model": "advertising.advertising",
     "pk": 12,
     "fields": {
-      "name": "many",
-      "channel": "just",
-      "budget": "25.68",
+      "name": "throughout",
+      "channel": "real",
+      "budget": "73.44",
       "product": 22
     }
   },
@@ -123,9 +123,9 @@
     "model": "advertising.advertising",
     "pk": 13,
     "fields": {
-      "name": "tax",
-      "channel": "certain",
-      "budget": "36.56",
+      "name": "citizen",
+      "channel": "agency",
+      "budget": "87.81",
       "product": 23
     }
   },
@@ -133,9 +133,9 @@
     "model": "advertising.advertising",
     "pk": 14,
     "fields": {
-      "name": "decade",
-      "channel": "fear",
-      "budget": "90.00",
+      "name": "live",
+      "channel": "lose",
+      "budget": "93.73",
       "product": 24
     }
   },
@@ -143,9 +143,9 @@
     "model": "advertising.advertising",
     "pk": 15,
     "fields": {
-      "name": "director",
-      "channel": "church",
-      "budget": "33.35",
+      "name": "nature",
+      "channel": "theory",
+      "budget": "22.14",
       "product": 25
     }
   },
@@ -153,9 +153,9 @@
     "model": "advertising.advertising",
     "pk": 16,
     "fields": {
-      "name": "decision",
-      "channel": "government",
-      "budget": "74.49",
+      "name": "choice",
+      "channel": "reason",
+      "budget": "69.24",
       "product": 26
     }
   },
@@ -163,9 +163,9 @@
     "model": "advertising.advertising",
     "pk": 17,
     "fields": {
-      "name": "prevent",
-      "channel": "likely",
-      "budget": "30.30",
+      "name": "foot",
+      "channel": "figure",
+      "budget": "43.25",
       "product": 27
     }
   },
@@ -173,9 +173,9 @@
     "model": "advertising.advertising",
     "pk": 18,
     "fields": {
-      "name": "talk",
-      "channel": "hundred",
-      "budget": "34.13",
+      "name": "stuff",
+      "channel": "in",
+      "budget": "14.47",
       "product": 28
     }
   },
@@ -183,9 +183,9 @@
     "model": "advertising.advertising",
     "pk": 19,
     "fields": {
-      "name": "treatment",
-      "channel": "account",
-      "budget": "29.95",
+      "name": "education",
+      "channel": "food",
+      "budget": "98.16",
       "product": 29
     }
   },
@@ -193,10 +193,110 @@
     "model": "advertising.advertising",
     "pk": 20,
     "fields": {
-      "name": "actually",
-      "channel": "actually",
-      "budget": "34.70",
+      "name": "accept",
+      "channel": "Congress",
+      "budget": "34.80",
       "product": 30
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 21,
+    "fields": {
+      "name": "concern",
+      "channel": "south",
+      "budget": "63.65",
+      "product": 31
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 22,
+    "fields": {
+      "name": "per",
+      "channel": "trial",
+      "budget": "70.19",
+      "product": 32
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 23,
+    "fields": {
+      "name": "growth",
+      "channel": "send",
+      "budget": "10.68",
+      "product": 33
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 24,
+    "fields": {
+      "name": "sign",
+      "channel": "system",
+      "budget": "77.33",
+      "product": 34
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 25,
+    "fields": {
+      "name": "stand",
+      "channel": "especially",
+      "budget": "82.47",
+      "product": 35
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 26,
+    "fields": {
+      "name": "quickly",
+      "channel": "send",
+      "budget": "7.08",
+      "product": 36
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 27,
+    "fields": {
+      "name": "thus",
+      "channel": "magazine",
+      "budget": "30.78",
+      "product": 37
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 28,
+    "fields": {
+      "name": "boy",
+      "channel": "themselves",
+      "budget": "12.70",
+      "product": 38
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 29,
+    "fields": {
+      "name": "heavy",
+      "channel": "board",
+      "budget": "1.11",
+      "product": 39
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 30,
+    "fields": {
+      "name": "article",
+      "channel": "garden",
+      "budget": "86.01",
+      "product": 40
     }
   }
 ]
