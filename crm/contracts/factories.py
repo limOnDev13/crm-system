@@ -19,6 +19,10 @@ def _create_test_file(
     if not file_dir:
         path = filename
     else:
+        try:
+            os.mkdir(file_dir)
+        except FileExistsError:
+            pass
         path = os.path.join(file_dir, filename)
 
     with open(path, encoding="UTF-8", mode="w") as file:
