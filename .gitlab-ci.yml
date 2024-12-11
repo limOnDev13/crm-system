@@ -37,6 +37,7 @@ unittest:
         - postgres:13.3
     script:
         - cd crm
+        - ls -l
         - python3 manage.py test
     variables:
         POSTGRES_DB: $POSTGRES_DB
