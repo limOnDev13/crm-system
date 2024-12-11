@@ -121,6 +121,24 @@ class CustomerDeleteView(DeleteView):
 
 def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
     """View func for updating the customer."""
+    customer = (
+        Customer.objects.select_related("lead").select_related("contract").get(pk=pk)
+    )
+    form = CustomerUpdateForm(
+        initial={
+            "first_name": customer.lead.first_name,
+            "last_name": customer.lead.last_name,
+            "phone": customer.lead.phone,
+            "email": customer.lead.email,
+            "ads": customer.lead.ads,
+            "name": customer.contract.name,
+            "product": customer.contract.product,
+            "doc": customer.contract.doc,
+            "end_date": customer.contract.end_date,
+            "cost": customer.contract.cost,
+        }
+    )
+
     if request.method == "POST":
         form = CustomerUpdateForm(request.POST, request.FILES)
         if form.is_valid():
@@ -147,23 +165,6 @@ def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
             url = reverse("clients:customers_detail", kwargs={"pk": pk})
             return redirect(url)
 
-    customer = (
-        Customer.objects.select_related("lead").select_related("contract").get(pk=pk)
-    )
-    form = CustomerUpdateForm(
-        initial={
-            "first_name": customer.lead.first_name,
-            "last_name": customer.lead.last_name,
-            "phone": customer.lead.phone,
-            "email": customer.lead.email,
-            "ads": customer.lead.ads,
-            "name": customer.contract.name,
-            "product": customer.contract.product,
-            "doc": customer.contract.doc,
-            "end_date": customer.contract.end_date,
-            "cost": customer.contract.cost,
-        }
-    )
     context = {"form": form, "object": customer}
     return render(request, "clients/customers-edit.html", context=context)
 
