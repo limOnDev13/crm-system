@@ -9,11 +9,6 @@ stages:
     - test
 
 before_script:
-    - python -V
-    - pip install virtualenv
-    - virtualenv .venv
-    - source .venv/bin/activate
-    - ls -a
     - pip install -r requirements_dev.txt
 
 black:
@@ -36,14 +31,13 @@ mypy:
     script:
         - python3 -m mypy .
 
-
 unittest:
     stage: test
     services:
-        - postgres
-    image: postgres
+        - postgres:13.3
     script:
         - cd crm
+        - ls -l
         - python3 manage.py test
     variables:
         POSTGRES_DB: $POSTGRES_DB
