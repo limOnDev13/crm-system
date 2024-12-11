@@ -1,19 +1,19 @@
-from typing import Optional, Dict, Any
-from string import ascii_letters
 import random
 from copy import deepcopy
-from datetime import timedelta
+from datetime import date, timedelta
+from string import ascii_letters
+from typing import Any, Dict, Optional
 
 from advertising.factories import AdvertisingFactory
 from contracts.factories import ContractFactory
 from contracts.models import Contract
 from django.test import TestCase
 from django.urls import reverse
-
 from services.factories import ServiceFactory
-from .factories import LeadFactory, CustomerFactory
-from .models import Lead, Customer
+
+from .factories import CustomerFactory, LeadFactory
 from .forms import NewCustomerForm
+from .models import Customer, Lead
 
 
 class LeadsListViewTest(TestCase):
@@ -44,13 +44,19 @@ class LeadsListViewTest(TestCase):
         leads = response.context["leads"]
         customers = Customer.objects.all()
         leads_are_customers = [customer.lead for customer in customers]
-        leads_are_not_customers = [lead for lead in leads if lead not in leads_are_customers]
+        leads_are_not_customers = [
+            lead for lead in leads if lead not in leads_are_customers
+        ]
 
         for lead_is_customer in leads_are_customers:
-            self.assertNotContains(response, f"<a href=/customers/new/{lead_is_customer.pk}", html=True)
+            self.assertNotContains(
+                response, f"<a href=/customers/new/{lead_is_customer.pk}", html=True
+            )
 
         for lead_is_not_customer in leads_are_not_customers:
-            self.assertNotContains(response, f"<a href=/customers/new/{lead_is_not_customer.pk}", html=True)
+            self.assertNotContains(
+                response, f"<a href=/customers/new/{lead_is_not_customer.pk}", html=True
+            )
 
 
 class LeadsDetailViewTest(TestCase):
@@ -137,7 +143,9 @@ class LeadsCreateViewTest(TestCase):
                 "ads": self.ads.pk,
             },
         )
-        self.assertContains(response, "Lead with this Phone already exists.", html=False)
+        self.assertContains(
+            response, "Lead with this Phone already exists.", html=False
+        )
 
         # Check that there is no second entry in the database
         non_existing_lead = Lead.objects.filter(
@@ -160,30 +168,34 @@ class LeadsCreateViewTest(TestCase):
         self.assertRedirects(response, reverse("clients:leads_list"))
         self.assertTrue(self.qs.exists())
         self.lead = self.qs.first()
+        if self.lead is None:
+            self.fail("Self.lead is None...")
+        else:
+            # try creating a second lead with the same phone
+            second_lead_data = LeadFactory.build()
+            response = self.client.post(
+                reverse("clients:leads_create"),
+                {
+                    "first_name": second_lead_data.first_name,
+                    "last_name": second_lead_data.last_name,
+                    "phone": second_lead_data.phone,
+                    "email": self.lead.email,
+                    "ads": self.ads.pk,
+                },
+            )
+            self.assertContains(
+                response, "Lead with this Email already exists.", html=False
+            )
 
-        # try creating a second lead with the same phone
-        second_lead_data = LeadFactory.build()
-        response = self.client.post(
-            reverse("clients:leads_create"),
-            {
-                "first_name": second_lead_data.first_name,
-                "last_name": second_lead_data.last_name,
-                "phone": second_lead_data.phone,
-                "email": self.lead.email,
-                "ads": self.ads.pk,
-            },
-        )
-        self.assertContains(response, "Lead with this Email already exists.", html=False)
-
-        # Check that there is no second entry in the database
-        non_existing_lead = Lead.objects.filter(
-            first_name=second_lead_data.first_name,
-            last_name=second_lead_data.last_name,
-            phone=second_lead_data.phone,
-            email=self.lead_data.email,
-            ads=self.ads.pk,
-        ).first()
-        self.assertIsNone(non_existing_lead)
+            # Check that there is no second entry in the database
+            non_existing_lead = Lead.objects.filter(
+                first_name=second_lead_data.first_name,
+                last_name=second_lead_data.last_name,
+                phone=second_lead_data.phone,
+                email=self.lead_data.email,
+                ads=self.ads.pk,
+            ).first()
+            self.assertIsNone(non_existing_lead)
 
 
 class LeadsUpdateViewTest(TestCase):
@@ -196,7 +208,7 @@ class LeadsUpdateViewTest(TestCase):
         self.lead.delete()
 
     def test_update_lead(self):
-        """Test updating the ads."""
+        """Test updating the lead."""
         updated_lead = LeadFactory.build()
         updated_ads = AdvertisingFactory.create()
 
@@ -230,6 +242,32 @@ class LeadsUpdateViewTest(TestCase):
         self.assertEqual(lead_.email, updated_lead.email)
         self.assertEqual(lead_.ads.pk, updated_ads.pk)
 
+    def test_updating_lead_with_invalid_phone(self):
+        """Negative test for changing the phone field to an invalid phone."""
+        updated_lead = LeadFactory.build()
+        updated_ads = AdvertisingFactory.create()
+        invalid_phone = "".join(random.choices(ascii_letters, k=random.randint(1, 15)))
+
+        response = self.client.post(
+            reverse(
+                "clients:leads_edit",
+                kwargs={"pk": self.lead.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": invalid_phone,
+                "email": updated_lead.email,
+                "ads": updated_ads.pk,
+            },
+        )
+        form = response.context["form"]
+        self.assertFormError(form, "phone", "Phone must have format +7 (999) 000 0000")
+
+        # Check that self.lead has not changed in the database
+        lead = Lead.objects.filter(pk=self.lead.pk).select_related("ads").first()
+        self.assertTrue(lead.phone != invalid_phone)
+
     def test_changing_phone_field_to_existing_one(self):
         """Negative test for changing the phone field to an existing one."""
         second_lead = LeadFactory.create()
@@ -249,7 +287,9 @@ class LeadsUpdateViewTest(TestCase):
                 "ads": updated_ads.pk,
             },
         )
-        self.assertContains(response, "Lead with this Phone already exists.", html=False)
+        self.assertContains(
+            response, "Lead with this Phone already exists.", html=False
+        )
 
         # Check that self.lead has not changed in the database
         lead = Lead.objects.filter(pk=self.lead.pk).select_related("ads").first()
@@ -274,7 +314,9 @@ class LeadsUpdateViewTest(TestCase):
                 "ads": updated_ads.pk,
             },
         )
-        self.assertContains(response, "Lead with this Email already exists.", html=False)
+        self.assertContains(
+            response, "Lead with this Email already exists.", html=False
+        )
 
         # Check that self.lead has not changed in the database
         lead = Lead.objects.filter(pk=self.lead.pk).select_related("ads").first()
@@ -360,14 +402,15 @@ class CustomerCreateViewTest(TestCase):
         self.assertTrue(self.contract_qs.exists())
         self.lead = self.lead_qs.first()
         self.contract = self.contract_qs.first()
-        self.assertTrue(Customer.objects.filter(lead=self.lead, contract=self.contract).exists())
+        self.assertTrue(
+            Customer.objects.filter(lead=self.lead, contract=self.contract).exists()
+        )
 
     def test_creating_customer_with_invalid_phone(self):
         """Negative test of creating a customer with an invalid phone."""
         kwargs = deepcopy(self.request_kwargs)
-        kwargs["phone"] = "".join(random.choices(
-            ascii_letters,
-            k=random.randint(1, 10))
+        kwargs["phone"] = "".join(
+            random.choices(ascii_letters, k=random.randint(1, 10))
         )
         response = self.client.post(
             reverse("clients:customers_new"),
@@ -474,31 +517,35 @@ class CustomerCreateViewTest(TestCase):
         )
         self.lead = self.lead_qs.first()
         self.contract = self.contract_qs.first()
-
-        # try creating second customer with identical contract name
-        second_lead_data = LeadFactory.build()
-        second_contract_data = ContractFactory.build()
-        response = self.client.post(
-            reverse("clients:customers_new"),
-            {
-                "first_name": second_lead_data.first_name,
-                "last_name": second_lead_data.last_name,
-                "phone": second_lead_data.phone,
-                "email": second_lead_data.email,
-                "ads": self.ads.pk,
-                "name": second_contract_data.name,
-                "product": self.product.pk,
-                "doc": second_contract_data.doc,
-                "end_date": self.contract.start_date - timedelta(days=random.randint(1, 10)),
-                "cost": second_contract_data.cost,
-            },
-        )
-        form: NewCustomerForm = response.context["form"]
-        self.assertFormError(
-            form,
-            None,
-            f"The end date must not be less than the start date ({self.contract.start_date})."
-        )
+        if self.contract is None:
+            self.fail("self.contract is None...")
+        else:
+            # try creating second customer with identical contract name
+            second_lead_data = LeadFactory.build()
+            second_contract_data = ContractFactory.build()
+            response = self.client.post(
+                reverse("clients:customers_new"),
+                {
+                    "first_name": second_lead_data.first_name,
+                    "last_name": second_lead_data.last_name,
+                    "phone": second_lead_data.phone,
+                    "email": second_lead_data.email,
+                    "ads": self.ads.pk,
+                    "name": second_contract_data.name,
+                    "product": self.product.pk,
+                    "doc": second_contract_data.doc,
+                    "end_date": self.contract.start_date
+                    - timedelta(days=random.randint(1, 10)),
+                    "cost": second_contract_data.cost,
+                },
+            )
+            form: NewCustomerForm = response.context["form"]
+            self.assertFormError(
+                form,
+                None,
+                f"The end date must not be less than the start date"
+                f" ({self.contract.start_date}).",
+            )
 
 
 class CustomersListViewTest(TestCase):
@@ -564,3 +611,257 @@ class CustomerDetailViewTest(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
+
+
+class UpdateCustomerTest(TestCase):
+    """Test case class for testing update_customer."""
+
+    def setUp(self):
+        self.customer = CustomerFactory.create()
+
+    def tearDown(self):
+        self.customer.delete()
+
+    def test_update_customer(self):
+        """Test updating the customer."""
+        previous_lead_pk = self.customer.lead.pk
+        previous_contract_pk = self.customer.contract.pk
+        updated_lead = LeadFactory.build()
+        updated_contract = ContractFactory.build()
+        ads = AdvertisingFactory.create()
+        product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_edit",
+                kwargs={"pk": self.customer.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": updated_lead.phone,
+                "email": updated_lead.email,
+                "ads": ads.pk,
+                "name": updated_contract.name,
+                "product": product.pk,
+                "doc": updated_contract.doc,
+                "end_date": updated_contract.end_date,
+                "cost": updated_contract.cost,
+            },
+        )
+
+        # Check redirect
+        self.assertRedirects(
+            response,
+            reverse(
+                "clients:customers_detail",
+                kwargs={"pk": self.customer.pk},
+            ),
+        )
+        # Check that the old primary key contains updated data
+        customer_: Customer = (
+            Customer.objects.filter(pk=self.customer.pk)
+            .select_related("lead")
+            .select_related("contract")
+            .first()
+        )
+        self.assertEqual(customer_.lead.first_name, updated_lead.first_name)
+        self.assertEqual(customer_.lead.last_name, updated_lead.last_name)
+        self.assertEqual(customer_.lead.phone, updated_lead.phone)
+        self.assertEqual(customer_.lead.email, updated_lead.email)
+        self.assertEqual(customer_.lead.ads.pk, ads.pk)
+        self.assertEqual(customer_.contract.name, updated_contract.name)
+        self.assertEqual(customer_.contract.product.pk, product.pk)
+        self.assertEqual(customer_.contract.end_date, updated_contract.end_date)
+        self.assertEqual(float(customer_.contract.cost), updated_contract.cost)
+        self.assertEqual(customer_.contract.pk, previous_contract_pk)
+        self.assertEqual(customer_.lead.pk, previous_lead_pk)
+
+    def test_updating_customer_changing_phone_field_to_existing_one(self):
+        """Negative test for changing the phone field to an existing one."""
+        second_lead = LeadFactory.create()
+        updated_lead = LeadFactory.build()
+        updated_contract = ContractFactory.build()
+        ads = AdvertisingFactory.create()
+        product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_edit",
+                kwargs={"pk": self.customer.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": second_lead.phone,
+                "email": updated_lead.email,
+                "ads": ads.pk,
+                "name": updated_contract.name,
+                "product": product.pk,
+                "doc": updated_contract.doc,
+                "end_date": updated_contract.end_date,
+                "cost": updated_contract.cost,
+            },
+        )
+        self.assertContains(
+            response, f"Key (phone)=({second_lead.phone}) already exists.", html=False
+        )
+
+        # Check that self.lead has not changed in the database
+        customer = (
+            Customer.objects.filter(pk=self.customer.pk).select_related("lead").first()
+        )
+        self.assertTrue(customer.lead.phone != second_lead.phone)
+
+    def test_updating_customer_changing_email_field_to_existing_one(self):
+        """Negative test for changing the email field to an existing one."""
+        second_lead = LeadFactory.create()
+        updated_lead = LeadFactory.build()
+        updated_contract = ContractFactory.build()
+        ads = AdvertisingFactory.create()
+        product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_edit",
+                kwargs={"pk": self.customer.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": updated_lead.phone,
+                "email": second_lead.email,
+                "ads": ads.pk,
+                "name": updated_contract.name,
+                "product": product.pk,
+                "doc": updated_contract.doc,
+                "end_date": updated_contract.end_date,
+                "cost": updated_contract.cost,
+            },
+        )
+        self.assertContains(
+            response, f"Key (email)=({second_lead.email}) already exists.", html=False
+        )
+
+        # Check that self.lead has not changed in the database
+        customer = (
+            Customer.objects.filter(pk=self.customer.pk).select_related("lead").first()
+        )
+        self.assertTrue(customer.lead.email != second_lead.email)
+
+    def test_updating_customer_changing_contract_name_field_to_existing_one(self):
+        """Negative test for changing the name field to an existing one."""
+        second_contract = ContractFactory.create()
+        updated_lead = LeadFactory.build()
+        updated_contract = ContractFactory.build()
+        ads = AdvertisingFactory.create()
+        product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_edit",
+                kwargs={"pk": self.customer.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": updated_lead.phone,
+                "email": updated_lead.email,
+                "ads": ads.pk,
+                "name": second_contract.name,
+                "product": product.pk,
+                "doc": updated_contract.doc,
+                "end_date": updated_contract.end_date,
+                "cost": updated_contract.cost,
+            },
+        )
+        self.assertContains(
+            response, f"Key (name)=({second_contract.name}) already exists.", html=False
+        )
+
+        # Check that self.lead has not changed in the database
+        customer = (
+            Customer.objects.filter(pk=self.customer.pk)
+            .select_related("contract")
+            .first()
+        )
+        self.assertTrue(customer.contract.name != second_contract.name)
+
+    def test_updating_customer_entering_invalid_phone(self):
+        """Negative test for changing the phone field to invalid format."""
+        invalid_phone = "".join(random.choices(ascii_letters, k=random.randint(1, 10)))
+        updated_lead = LeadFactory.build()
+        updated_contract = ContractFactory.build()
+        ads = AdvertisingFactory.create()
+        product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_edit",
+                kwargs={"pk": self.customer.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": invalid_phone,
+                "email": updated_lead.email,
+                "ads": ads.pk,
+                "name": updated_contract.name,
+                "product": product.pk,
+                "doc": updated_contract.doc,
+                "end_date": updated_contract.end_date,
+                "cost": updated_contract.cost,
+            },
+        )
+        self.assertContains(
+            response, "Phone must have format +7 (999) 000 0000", html=False
+        )
+
+        # Check that self.lead has not changed in the database
+        customer = (
+            Customer.objects.filter(pk=self.customer.pk).select_related("lead").first()
+        )
+        self.assertTrue(customer.lead.phone != invalid_phone)
+
+    def test_updating_customer_entering_invalid_end_date(self):
+        """A negative test of the change of an active
+        client when entering a past end date."""
+        past_end_date: date = date.today() - timedelta(days=1)
+        updated_lead = LeadFactory.build()
+        updated_contract = ContractFactory.build()
+        ads = AdvertisingFactory.create()
+        product = ServiceFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_edit",
+                kwargs={"pk": self.customer.pk},
+            ),
+            {
+                "first_name": updated_lead.first_name,
+                "last_name": updated_lead.last_name,
+                "phone": updated_lead.phone,
+                "email": updated_lead.email,
+                "ads": ads.pk,
+                "name": updated_contract.name,
+                "product": product.pk,
+                "doc": updated_contract.doc,
+                "end_date": past_end_date.strftime("%Y-%m-%d"),
+                "cost": updated_contract.cost,
+            },
+        )
+
+        self.assertContains(
+            response,
+            f"The end date must not be less than the start date"
+            f" ({self.customer.contract.start_date.strftime("%Y-%m-%d")}).",
+            html=False,
+        )
+
+        # Check that self.lead has not changed in the database
+        customer = (
+            Customer.objects.filter(pk=self.customer.pk)
+            .select_related("contract")
+            .first()
+        )
+        self.assertTrue(customer.contract.end_date != past_end_date)
