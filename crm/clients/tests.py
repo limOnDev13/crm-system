@@ -1044,36 +1044,36 @@ class CreateCustomerFromLeadTest(TestCase):
         not_existing_customer = self.customer_qs.first()
         self.assertIsNone(not_existing_customer)
 
-    # def test_creating_customer_with_identical_contract_names(self):
-    #     """Negative test of creating a customer with an existing contract name."""
-    #     self.client.post(
-    #         reverse("clients:customers_new"),
-    #         self.request_kwargs,
-    #     )
-    #     self.lead = self.lead_qs.first()
-    #     self.contract = self.contract_qs.first()
-    #
-    #     # try creating second customer with identical contract name
-    #     second_lead_data = LeadFactory.build()
-    #     second_contract_data = ContractFactory.build()
-    #     response = self.client.post(
-    #         reverse("clients:customers_new"),
-    #         {
-    #             "first_name": second_lead_data.first_name,
-    #             "last_name": second_lead_data.last_name,
-    #             "phone": second_lead_data.phone,
-    #             "email": second_lead_data.email,
-    #             "ads": self.ads.pk,
-    #             "name": self.contract_data.name,
-    #             "product": self.product.pk,
-    #             "doc": second_contract_data.doc,
-    #             "end_date": second_contract_data.end_date,
-    #             "cost": second_contract_data.cost,
-    #         },
-    #     )
-    #     form: NewCustomerForm = response.context["form"]
-    #     self.assertFormError(form, "name", "Contract name already exists")
-    #
+    def test_creating_customer_from_lead_with_identical_contract_names(self):
+        """Negative test of creating a customer with an existing contract name."""
+        second_contract: Contract = ContractFactory.create()
+
+        response = self.client.post(
+            reverse(
+                "clients:customers_from_lead",
+                kwargs={"lead_pk": self.lead.pk},
+            ),
+            {
+                "first_name": self.lead.first_name,
+                "last_name": self.lead.last_name,
+                "phone": self.lead.phone,
+                "email": self.lead.email,
+                "ads": self.lead.ads.pk,
+                "name": second_contract.name,
+                "product": self.product.pk,
+                "doc": self.contract_data.doc,
+                "end_date": self.contract_data.end_date,
+                "cost": self.contract_data.cost,
+            },
+        )
+        self.assertContains(response, "Contract name already exists")
+        second_contract.delete()
+
+        not_existing_contract = self.contract_qs.first()
+        self.assertIsNone(not_existing_contract)
+        not_existing_customer = self.customer_qs.first()
+        self.assertIsNone(not_existing_customer)
+
     # def test_creating_customer_with_invalid_end_date(self):
     #     """Negative test of creating a customer with an invalid end date."""
     #     self.client.post(
