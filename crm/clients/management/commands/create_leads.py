@@ -20,7 +20,7 @@ class Command(BaseCommand):
             self.stdout.write(
                 f"Create #{num} lead:\n"
                 f"pk={lead.pk} first name={lead.first_name} "
-                f"second name={lead.second_name} phone={lead.phone} "
+                f"last_name={lead.last_name} phone={lead.phone} "
                 f"email={lead.email}\n"
                 f"ads.pk={lead.ads.pk} "
                 f"ads.name={lead.ads.name}\n"

@@ -49,3 +49,6 @@ class Contract(models.Model):
         path = self.doc.path
         os.remove(path)
         super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name}({self.pk})"
