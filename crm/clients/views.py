@@ -159,11 +159,9 @@ def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
             except IntegrityError as exc:
                 field_name, exc_text = integrity_error_parser(exc, form)
                 form.add_error(field_name, exc_text)
-                context = {"form": form, "object": customer}
-                return render(request, "clients/customers-edit.html", context=context)
-
-            url = reverse("clients:customers_detail", kwargs={"pk": pk})
-            return redirect(url)
+            else:
+                url = reverse("clients:customers_detail", kwargs={"pk": pk})
+                return redirect(url)
 
     context = {"form": form, "object": customer}
     return render(request, "clients/customers-edit.html", context=context)
@@ -172,21 +170,6 @@ def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
 def create_customer_from_lead(request: HttpRequest, lead_pk: int) -> HttpResponse:
     """View func for updating the customer."""
     lead = get_object_or_404(Lead, pk=lead_pk)
-
-    if request.method == "POST":
-        form = CustomerBaseForm(request.POST, request.FILES)
-        if form.is_valid():
-            lead_data, contract_data = form.get_data_from_customer_form()
-
-            for key, value in lead_data.items():
-                setattr(lead, key, value)
-            lead.save()
-            contract = Contract.objects.create(**contract_data)
-            Customer.objects.create(lead=lead, contract=contract)
-
-            url = reverse("clients:customers_list")
-            return redirect(url)
-
     if lead is not None:
         form = CustomerBaseForm(
             initial={
@@ -199,5 +182,25 @@ def create_customer_from_lead(request: HttpRequest, lead_pk: int) -> HttpRespons
         )
     else:
         form = CustomerBaseForm()
+
+    if request.method == "POST":
+        form = CustomerBaseForm(request.POST, request.FILES)
+        if form.is_valid():
+            lead_data, contract_data = form.get_data_from_customer_form()
+
+            try:
+                with transaction.atomic():
+                    for key, value in lead_data.items():
+                        setattr(lead, key, value)
+                    lead.save()
+                    contract = Contract.objects.create(**contract_data)
+                    Customer.objects.create(lead=lead, contract=contract)
+            except IntegrityError as exc:
+                field_name, exc_text = integrity_error_parser(exc, form)
+                form.add_error(field_name, exc_text)
+            else:
+                url = reverse("clients:customers_list")
+                return redirect(url)
+
     context = {"form": form, "object": lead}
     return render(request, "clients/customers-create-from-lead.html", context=context)
