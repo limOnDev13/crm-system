@@ -75,6 +75,7 @@ TEMPLATES = [
             BASE_DIR / 'clients' / 'templates',
             BASE_DIR / 'contracts' / 'templates',
             BASE_DIR / 'myauth' / 'templates',
+            BASE_DIR / 'my_statistics' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
