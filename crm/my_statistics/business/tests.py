@@ -6,6 +6,8 @@ from advertising.models import Advertising
 from clients.factories import LeadFactory
 from clients.models import Customer, Lead
 from contracts.factories import ContractFactory
+from contracts.models import Contract
+from django.db import IntegrityError
 from django.test import TestCase
 
 from .statistics_logic import count_ads_customers, count_ads_lead, count_ads_profit
@@ -81,15 +83,23 @@ class CountAdsCustomersTest(TestCase):
 
     def test_count_ads_customers(self):
         ads_num_customers: Dict[Advertising, int] = dict()
+        contracts: List[Contract] = list()
 
         for lead in self.leads:
             is_customer: bool = random.choice((True, False))
 
             if is_customer:
-                contract = ContractFactory.build()
-                contract.product = lead.ads.product
-                contract.save()
-                Customer.objects.create(lead=lead, contract=contract)
+                while True:
+                    try:
+                        contract = ContractFactory.build()
+                        contract.product = lead.ads.product
+                        contract.save()
+                        Customer.objects.create(lead=lead, contract=contract)
+                    except IntegrityError:
+                        pass
+                    else:
+                        contracts.append(contract)
+                        break
                 if lead.ads not in ads_num_customers:
                     ads_num_customers[lead.ads] = 1
                 else:
@@ -97,6 +107,9 @@ class CountAdsCustomersTest(TestCase):
 
         for ads in self.ads_list:
             self.assertEqual(count_ads_customers(ads), ads_num_customers.get(ads, 0))
+
+        for contract in contracts:
+            contract.delete()
 
 
 class CountAdsProfitTest(TestCase):
