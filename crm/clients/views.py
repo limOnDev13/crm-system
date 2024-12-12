@@ -2,6 +2,8 @@ from logging import getLogger
 from typing import Any, Dict, List
 
 from contracts.models import Contract
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import IntegrityError, transaction
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -14,8 +16,6 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.decorators import permission_required
 
 from .forms import CustomerBaseForm, CustomerUpdateForm, NewCustomerForm
 from .models import Customer, Lead
