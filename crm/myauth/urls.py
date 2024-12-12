@@ -15,6 +15,6 @@ urlpatterns = [
     path(
         "logout/",
         LogoutView.as_view(next_page=reverse_lazy("myauth:login")),
-        name="logout"
+        name="logout",
     ),
 ]
