@@ -1,23 +1,19 @@
-from typing import Dict, List
 import random
+from typing import Dict, List
 
-from django.test import TestCase
-from advertising.models import Advertising
 from advertising.factories import AdvertisingFactory
-from clients.models import Lead, Customer
+from advertising.models import Advertising
 from clients.factories import LeadFactory
-from services.models import Service
+from clients.models import Customer, Lead
 from contracts.factories import ContractFactory
+from django.test import TestCase
 
-from .statistics_logic import count_ads_lead, count_ads_customers, count_ads_profit
+from .statistics_logic import count_ads_customers, count_ads_lead, count_ads_profit
 
 
 def _create_ads() -> List[Advertising]:
     """Create random ads."""
-    return [
-            AdvertisingFactory.create()
-            for _ in range(10, 20)
-        ]
+    return [AdvertisingFactory.create() for _ in range(10, 20)]
 
 
 def _create_leads(ads: List[Advertising]) -> List[Lead]:
@@ -64,7 +60,8 @@ class CountAdsLeadsTest(TestCase):
             lead.delete()
 
     def test_count_lead_without_leads(self):
-        """Test calculating the number of leads for an ad when there is not a single lead."""
+        """Test calculating the number of leads
+        for an ad when there is not a single lead."""
         for ads in self.ads_list:
             self.assertEqual(count_ads_lead(ads), 0)
 
@@ -84,7 +81,7 @@ class CountAdsCustomersTest(TestCase):
 
     def test_count_ads_customers(self):
         ads_num_customers: Dict[Advertising, int] = dict()
-        products: List[Service] = list()
+
         for lead in self.leads:
             is_customer: bool = random.choice((True, False))
 
@@ -132,4 +129,7 @@ class CountAdsProfitTest(TestCase):
                     ads_profit[lead.ads] += contract.cost
 
         for ads in self.ads_list:
-            self.assertEqual(round(count_ads_profit(ads), 2), round(ads_profit.get(ads, -ads.budget), 2))
+            self.assertEqual(
+                round(count_ads_profit(ads), 2),
+                round(ads_profit.get(ads, -ads.budget), 2),
+            )
