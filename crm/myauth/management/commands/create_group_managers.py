@@ -34,12 +34,31 @@ class Command(BaseCommand):
             content_type=content_type,
         )
 
+        per_add_customer = Permission.objects.get(
+            codename="add_customer"
+        )
+        per_change_customer = Permission.objects.get(
+            codename="change_customer"
+        )
+        per_delete_customer = Permission.objects.get(
+            codename="delete_customer"
+        )
+        per_view_customer = Permission.objects.get(
+            codename="view_customer"
+        )
+
         managers.permissions.add(per_add_contract)
         managers.permissions.add(per_change_contract)
         managers.permissions.add(per_delete_contract)
         managers.permissions.add(per_view_contract)
+
         managers.permissions.add(per_view_lead)
         managers.permissions.add(per_create_customer_from_lead)
+
+        managers.permissions.add(per_add_customer)
+        managers.permissions.add(per_change_customer)
+        managers.permissions.add(per_delete_customer)
+        managers.permissions.add(per_view_customer)
 
         managers.save()
         print("Done")
