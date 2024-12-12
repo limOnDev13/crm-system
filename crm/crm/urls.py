@@ -25,7 +25,7 @@ urlpatterns = [
     path("", include("advertising.urls")),
     path("", include("clients.urls")),
     path("", include("contracts.urls")),
-    path("", include("myauth.urls")),
+    path("accounts/", include("myauth.urls")),
     path("admin/", admin.site.urls),
 ]
 
