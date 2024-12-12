@@ -1,5 +1,4 @@
 import random
-from typing import Any, Dict
 
 from django.contrib.auth.models import Group, User
 from django.test import TestCase

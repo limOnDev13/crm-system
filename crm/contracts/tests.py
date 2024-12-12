@@ -1,6 +1,6 @@
 import os
 from datetime import date, timedelta
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from advertising.factories import ServiceFactory
 from django.conf import settings
