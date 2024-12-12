@@ -7,8 +7,10 @@ from typing import Any, Dict, Optional
 from advertising.factories import AdvertisingFactory
 from contracts.factories import ContractFactory
 from contracts.models import Contract
+from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
+from myauth.utils import create_group_managers
 from services.factories import ServiceFactory
 
 from .factories import CustomerFactory, LeadFactory
@@ -19,7 +21,21 @@ from .models import Customer, Lead
 class CustomerCreateViewTest(TestCase):
     """Test case class for testing CustomerCreateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.lead_data = LeadFactory.build()
         self.ads = AdvertisingFactory.create()
         self.product = ServiceFactory.create()
@@ -219,6 +235,22 @@ class CustomerCreateViewTest(TestCase):
 class CustomersListViewTest(TestCase):
     """Test case class for testing CustomersListView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
+    def setUp(self):
+        self.client.login(**self.credentials)
+
     fixtures = [
         "services-fixtures.json",
         "ads-fixtures.json",
@@ -241,7 +273,21 @@ class CustomersListViewTest(TestCase):
 class CustomerDeleteViewTest(TestCase):
     """Test case class for testing CustomerDeleteView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.customer = CustomerFactory.create()
 
     def tearDown(self):
@@ -266,7 +312,21 @@ class CustomerDeleteViewTest(TestCase):
 class CustomerDetailViewTest(TestCase):
     """Test case class for testing CustomerDetailView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.customer = CustomerFactory.create()
 
     def tearDown(self):
@@ -284,7 +344,21 @@ class CustomerDetailViewTest(TestCase):
 class UpdateCustomerTest(TestCase):
     """Test case class for testing update_customer."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.customer = CustomerFactory.create()
 
     def tearDown(self):
@@ -538,7 +612,21 @@ class UpdateCustomerTest(TestCase):
 class CreateCustomerFromLeadTest(TestCase):
     """Test case class for testing view func create_customer_from_lead."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.lead = LeadFactory.create()
         self.product = ServiceFactory.create()
         self.contract_data = ContractFactory.build()

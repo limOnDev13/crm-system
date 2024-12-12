@@ -1,8 +1,11 @@
 import random
+from typing import Any, Dict
 
+from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
 from factory.faker import Faker
+from myauth.utils import create_group_marketers
 from services.factories import ServiceFactory
 
 from .factories import AdvertisingFactory
@@ -11,6 +14,22 @@ from .models import Advertising
 
 class AdvertisingListViewTest(TestCase):
     """Test case class for testing AdvertisingListView."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
+    def setUp(self):
+        self.client.login(**self.credentials)
 
     fixtures = [
         "services-fixtures.json",
@@ -31,7 +50,21 @@ class AdvertisingListViewTest(TestCase):
 class AdvertisingDetailViewTest(TestCase):
     """Test case class for testing AdvertisingDetailView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.ads = AdvertisingFactory.create()
 
     def tearDown(self):
@@ -49,7 +82,21 @@ class AdvertisingDetailViewTest(TestCase):
 class AdsCreateViewTest(TestCase):
     """Test case class for testing AdvertisingCreateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.ads_name = Faker("word")
         # Check that the object is being created in the test
         Advertising.objects.filter(name=self.ads_name).delete()
@@ -77,7 +124,21 @@ class AdsCreateViewTest(TestCase):
 class AdsUpdateViewTest(TestCase):
     """Test case class for testing AdvertisingUpdateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.ads = AdvertisingFactory.create()
 
     def tearDown(self):
@@ -119,7 +180,21 @@ class AdsUpdateViewTest(TestCase):
 class AdsDeleteViewTest(TestCase):
     """Test case class for testing AdvertisingDeleteView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.ads = AdvertisingFactory.create()
 
     def tearDown(self):
