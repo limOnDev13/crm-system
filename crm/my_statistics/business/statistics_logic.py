@@ -1,12 +1,12 @@
 from typing import List
 
-from django.db.models import Subquery, Sum
-
 from advertising.models import Advertising
-from clients.models import Lead, Customer
+from clients.models import Customer, Lead
 from contracts.models import Contract
+from django.db.models import Subquery, Sum
+from services.models import Service
 
-from .statistics_models import AdsStatistics
+from .statistics_models import AdsStatistics, TotalStatistics
 
 
 def count_ads_lead(ads: Advertising) -> int:
@@ -16,7 +16,7 @@ def count_ads_lead(ads: Advertising) -> int:
 
 def count_ads_customers(ads: Advertising) -> int:
     """Count the number of leads who are interested
-     in advertising and become active customers."""
+    in advertising and become active customers."""
     sub_qs = Lead.objects.filter(ads=ads).values("pk")
     return Customer.objects.filter(lead__in=Subquery(sub_qs)).count()
 
@@ -27,9 +27,9 @@ def count_ads_profit(ads: Advertising) -> float:
     customers_with_ads_qs = Customer.objects.filter(
         lead__in=Subquery(leads_with_ads_qs)
     ).values("contract")
-    income = Contract.objects.filter(
-        pk__in=Subquery(customers_with_ads_qs)
-    ).aggregate(Sum("cost"))["cost__sum"]
+    income = Contract.objects.filter(pk__in=Subquery(customers_with_ads_qs)).aggregate(
+        Sum("cost")
+    )["cost__sum"]
 
     income = 0 if income is None else float(income)
     expenses = float(ads.budget)
@@ -50,3 +50,12 @@ def ads_statistics() -> List[AdsStatistics]:
         )
         for ads in ads_list
     ]
+
+
+def total_statistics() -> TotalStatistics:
+    return TotalStatistics(
+        products_count=Service.objects.count(),
+        advertisements_count=Advertising.objects.count(),
+        leads_count=Lead.objects.count(),
+        customers_count=Customer.objects.count(),
+    )
