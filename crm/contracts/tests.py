@@ -4,9 +4,11 @@ from typing import Optional
 
 from advertising.factories import ServiceFactory
 from django.conf import settings
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
+from myauth.utils import create_group_managers
 
 from .factories import ContractFactory
 from .models import Contract
@@ -49,6 +51,22 @@ class ContractTestCase(TestCase):
 class ContractsListViewTest(TestCase):
     """Test case class for testing ContractListView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
+    def setUp(self):
+        self.client.login(**self.credentials)
+
     fixtures = [
         "services-fixtures.json",
         "contracts-fixtures.json",
@@ -68,7 +86,21 @@ class ContractsListViewTest(TestCase):
 class ContractDetailViewTest(TestCase):
     """Test case class for testing ContractDetailView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.contract = ContractFactory.create()
 
     def tearDown(self):
@@ -88,7 +120,21 @@ class ContractDetailViewTest(TestCase):
 class ContractCreateViewTest(TestCase):
     """Test case class for testing ContractCreateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.contract_data = ContractFactory.build()
         self.product = ServiceFactory.create()
         self.qs = Contract.objects.filter(
@@ -125,7 +171,21 @@ class ContractCreateViewTest(TestCase):
 class ContractUpdateViewTest(TestCase):
     """Test case class for testing ContractUpdateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.contract = ContractFactory.create()
 
     def tearDown(self):
@@ -171,7 +231,21 @@ class ContractUpdateViewTest(TestCase):
 class ContractDeleteViewTest(TestCase):
     """Test case class for testing ContractDeleteView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.contract = ContractFactory.create()
 
     def tearDown(self):
