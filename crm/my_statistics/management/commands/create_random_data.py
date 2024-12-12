@@ -1,15 +1,15 @@
 import random
 from typing import List
 
-from contracts.factories import ContractFactory
-from django.db import IntegrityError
-from services.models import Service
-from services.factories import ServiceFactory
 from advertising.factories import AdvertisingFactory
 from advertising.models import Advertising
-from clients.models import Lead, Customer
-from clients.factories import LeadFactory, CustomerFactory
+from clients.factories import LeadFactory
+from clients.models import Customer, Lead
+from contracts.factories import ContractFactory
 from django.core.management import BaseCommand
+from django.db import IntegrityError
+from services.factories import ServiceFactory
+from services.models import Service
 
 
 class Command(BaseCommand):
@@ -21,8 +21,7 @@ class Command(BaseCommand):
         products_count: int = random.randint(10, 50)
         self.stdout.write(f"Number products: {products_count}")
         products: List[Service] = [
-            ServiceFactory.create()
-            for _ in range(products_count)
+            ServiceFactory.create() for _ in range(products_count)
         ]
 
         ads_count: int = random.randint(5, products_count)
@@ -64,4 +63,3 @@ class Command(BaseCommand):
             lead = random.choice(leads)
             leads.remove(lead)
             Customer.objects.create(lead=lead, contract=contract)
-
