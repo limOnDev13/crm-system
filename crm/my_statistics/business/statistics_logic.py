@@ -32,12 +32,12 @@ def count_ads_profit(ads: Advertising) -> float:
     ).aggregate(Sum("cost"))["cost__sum"]
 
     income = 0 if income is None else float(income)
-    expenses = ads.budget
+    expenses = float(ads.budget)
 
-    return income - expenses
+    return round(income - expenses, 2)
 
 
-def get_ads_statistics() -> List[AdsStatistics]:
+def ads_statistics() -> List[AdsStatistics]:
     """Get statistics on advertising."""
     ads_list: List[Advertising] = Advertising.objects.all()
 
