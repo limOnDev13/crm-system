@@ -3,7 +3,7 @@
     "model": "clients.customer",
     "pk": 1,
     "fields": {
-      "lead": 1,
+      "lead": 31,
       "contract": 1
     }
   },
@@ -11,7 +11,7 @@
     "model": "clients.customer",
     "pk": 2,
     "fields": {
-      "lead": 2,
+      "lead": 28,
       "contract": 2
     }
   },
@@ -19,7 +19,7 @@
     "model": "clients.customer",
     "pk": 3,
     "fields": {
-      "lead": 3,
+      "lead": 6,
       "contract": 3
     }
   },
@@ -27,7 +27,7 @@
     "model": "clients.customer",
     "pk": 4,
     "fields": {
-      "lead": 4,
+      "lead": 26,
       "contract": 4
     }
   },
@@ -35,7 +35,7 @@
     "model": "clients.customer",
     "pk": 5,
     "fields": {
-      "lead": 5,
+      "lead": 35,
       "contract": 5
     }
   },
@@ -43,7 +43,7 @@
     "model": "clients.customer",
     "pk": 6,
     "fields": {
-      "lead": 6,
+      "lead": 29,
       "contract": 6
     }
   },
@@ -51,7 +51,7 @@
     "model": "clients.customer",
     "pk": 7,
     "fields": {
-      "lead": 7,
+      "lead": 16,
       "contract": 7
     }
   },
@@ -59,7 +59,7 @@
     "model": "clients.customer",
     "pk": 8,
     "fields": {
-      "lead": 8,
+      "lead": 36,
       "contract": 8
     }
   },
@@ -67,7 +67,7 @@
     "model": "clients.customer",
     "pk": 9,
     "fields": {
-      "lead": 9,
+      "lead": 10,
       "contract": 9
     }
   },
@@ -75,8 +75,152 @@
     "model": "clients.customer",
     "pk": 10,
     "fields": {
-      "lead": 10,
+      "lead": 13,
       "contract": 10
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 11,
+    "fields": {
+      "lead": 4,
+      "contract": 11
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 12,
+    "fields": {
+      "lead": 37,
+      "contract": 12
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 13,
+    "fields": {
+      "lead": 9,
+      "contract": 13
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 14,
+    "fields": {
+      "lead": 3,
+      "contract": 14
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 15,
+    "fields": {
+      "lead": 15,
+      "contract": 15
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 16,
+    "fields": {
+      "lead": 20,
+      "contract": 16
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 17,
+    "fields": {
+      "lead": 19,
+      "contract": 17
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 18,
+    "fields": {
+      "lead": 24,
+      "contract": 18
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 19,
+    "fields": {
+      "lead": 7,
+      "contract": 19
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 20,
+    "fields": {
+      "lead": 11,
+      "contract": 20
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 21,
+    "fields": {
+      "lead": 1,
+      "contract": 21
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 22,
+    "fields": {
+      "lead": 34,
+      "contract": 22
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 23,
+    "fields": {
+      "lead": 25,
+      "contract": 23
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 24,
+    "fields": {
+      "lead": 33,
+      "contract": 24
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 25,
+    "fields": {
+      "lead": 17,
+      "contract": 25
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 26,
+    "fields": {
+      "lead": 5,
+      "contract": 26
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 27,
+    "fields": {
+      "lead": 27,
+      "contract": 27
+    }
+  },
+  {
+    "model": "clients.customer",
+    "pk": 28,
+    "fields": {
+      "lead": 22,
+      "contract": 28
     }
   }
 ]
