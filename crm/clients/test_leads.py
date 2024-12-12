@@ -3,8 +3,10 @@ from string import ascii_letters
 from typing import Any, Dict, Optional
 
 from advertising.factories import AdvertisingFactory
+from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
+from myauth.utils import create_group_managers, create_group_operators
 
 from .factories import LeadFactory
 from .models import Customer, Lead
@@ -12,6 +14,22 @@ from .models import Customer, Lead
 
 class LeadsListViewTest(TestCase):
     """Test case class for testing LeadsListView."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_managers()
+        cls.group = Group.objects.get(name="managers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
+    def setUp(self):
+        self.client.login(**self.credentials)
 
     fixtures = [
         "services-fixtures.json",
@@ -56,7 +74,21 @@ class LeadsListViewTest(TestCase):
 class LeadsDetailViewTest(TestCase):
     """Test case class for testing LeadDetailView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_operators()
+        cls.group = Group.objects.get(name="operators")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.lead = LeadFactory.create()
 
     def tearDown(self):
@@ -74,7 +106,21 @@ class LeadsDetailViewTest(TestCase):
 class LeadsCreateViewTest(TestCase):
     """Test case class for testing LeadCreateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_operators()
+        cls.group = Group.objects.get(name="operators")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.lead_data = LeadFactory.build()
         self.ads = AdvertisingFactory.create()
         self.qs = Lead.objects.filter(
@@ -195,7 +241,21 @@ class LeadsCreateViewTest(TestCase):
 class LeadsUpdateViewTest(TestCase):
     """Test case class for testing LeadUpdateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_operators()
+        cls.group = Group.objects.get(name="operators")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.lead = LeadFactory.create()
 
     def tearDown(self):
@@ -320,7 +380,21 @@ class LeadsUpdateViewTest(TestCase):
 class LeadsDeleteViewTest(TestCase):
     """Test case class for testing LeadDeleteView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_operators()
+        cls.group = Group.objects.get(name="operators")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.lead = LeadFactory.create()
 
     def tearDown(self):

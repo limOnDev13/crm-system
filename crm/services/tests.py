@@ -1,8 +1,10 @@
 import random
 
+from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
 from factory.faker import Faker
+from myauth.utils import create_group_marketers
 
 from .factories import ServiceFactory
 from .models import Service
@@ -14,6 +16,22 @@ class ServicesListViewTest(TestCase):
     fixtures = [
         "services-fixtures.json",
     ]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
+    def setUp(self):
+        self.client.login(**self.credentials)
 
     def test_services(self):
         """Test getting list of services"""
@@ -29,7 +47,21 @@ class ServicesListViewTest(TestCase):
 class ServicesDetailViewTest(TestCase):
     """Test case class for testing ServicesDetailView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.service = ServiceFactory.create()
 
     def tearDown(self):
@@ -47,7 +79,21 @@ class ServicesDetailViewTest(TestCase):
 class ServicesCreateViewTest(TestCase):
     """Test case class for testing ServicesCreateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.service_name = Faker("word")
         # Check that the object is being created in the test
         Service.objects.filter(name=self.service_name).delete()
@@ -76,7 +122,21 @@ class ServicesCreateViewTest(TestCase):
 class ServiceUpdateViewTest(TestCase):
     """Test case class for testing ServiceUpdateView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.service = ServiceFactory.create()
 
     def tearDown(self):
@@ -116,7 +176,21 @@ class ServiceUpdateViewTest(TestCase):
 class ServiceDeleteViewTest(TestCase):
     """Test case class for testing ServiceDeleteView."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="test", password="test")
+        cls.user = User.objects.create_user(**cls.credentials)
+        create_group_marketers()
+        cls.group = Group.objects.get(name="marketers")
+        cls.user.groups.add(cls.group)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+        cls.group.delete()
+
     def setUp(self):
+        self.client.login(**self.credentials)
         self.service = ServiceFactory.create()
 
     def tearDown(self):

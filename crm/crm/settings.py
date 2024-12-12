@@ -73,6 +73,7 @@ TEMPLATES = [
             BASE_DIR / 'advertising' / 'templates',
             BASE_DIR / 'clients' / 'templates',
             BASE_DIR / 'contracts' / 'templates',
+            BASE_DIR / 'myauth' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -171,3 +172,5 @@ LOGGING = {
         "level": "WARNING",
     },
 }
+
+LOGIN_REDIRECT_URL = "/"

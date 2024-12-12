@@ -2,6 +2,8 @@ from logging import getLogger
 from typing import Any, Dict, List
 
 from contracts.models import Contract
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import IntegrityError, transaction
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -22,12 +24,13 @@ from .utils import integrity_error_parser
 logger = getLogger()
 
 
-class LeadsListView(ListView):
+class LeadsListView(PermissionRequiredMixin, ListView):
     """ListView class for getting list of leads."""
 
     template_name = "clients/leads-list.html"
     queryset = Lead.objects.select_related("ads")
     context_object_name = "leads"
+    permission_required = ("clients.view_lead",)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context: Dict[str, Any] = super().get_context_data(
@@ -43,62 +46,69 @@ class LeadsListView(ListView):
         return context
 
 
-class LeadDetailView(DetailView):
+class LeadDetailView(PermissionRequiredMixin, DetailView):
     """DetailView class for getting details about the lead."""
 
     template_name = "clients/leads-detail.html"
     queryset = Lead.objects.select_related("ads")
+    permission_required = ("clients.view_lead",)
 
 
-class LeadUpdateView(UpdateView):
+class LeadUpdateView(PermissionRequiredMixin, UpdateView):
     """UpdateView class for updating the lead."""
 
     template_name = "clients/leads-edit.html"
     model = Lead
     fields = "first_name", "last_name", "phone", "email", "ads"
+    permission_required = ("clients.change_lead",)
 
     def get_success_url(self):
         return reverse("clients:leads_detail", kwargs={"pk": self.object.pk})
 
 
-class LeadDeleteView(DeleteView):
+class LeadDeleteView(PermissionRequiredMixin, DeleteView):
     """DeleteView class for deleting the lead."""
 
     template_name = "clients/leads-delete.html"
     model = Lead
     success_url = reverse_lazy("clients:leads_list")
+    permission_required = ("clients.delete_lead",)
 
 
-class LeadCreateView(CreateView):
+class LeadCreateView(PermissionRequiredMixin, CreateView):
     """CreateView class for creating a new lead."""
 
     template_name = "clients/leads-create.html"
     model = Lead
     fields = "first_name", "last_name", "phone", "email", "ads"
     success_url = reverse_lazy("clients:leads_list")
+    permission_required = ("clients.add_lead",)
 
 
-class CustomersListView(ListView):
+class CustomersListView(PermissionRequiredMixin, ListView):
     """ListView class for getting a list of customers."""
 
     template_name = "clients/customers-list.html"
     queryset = Customer.objects.select_related("lead").select_related("contract")
     context_object_name = "customers"
+    permission_required = ("clients.view_customer",)
 
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(PermissionRequiredMixin, DetailView):
     """DetailView class for getting details about the customer."""
 
     template_name = "clients/customers-detail.html"
     queryset = Customer.objects.select_related("lead").select_related("contract")
+    permission_required = ("clients.view_customer",)
 
 
-class CustomerCreateView(FormView):
+class CustomerCreateView(PermissionRequiredMixin, FormView):
     """CreateView class for creating a new customer."""
 
     template_name = "clients/customers-create.html"
     success_url = reverse_lazy("clients:customers_list")
     form_class = NewCustomerForm
+    permission_required = ("clients.add_customer",)
 
     def form_valid(self, form: NewCustomerForm):
         resp = super().form_valid(form)
@@ -111,14 +121,16 @@ class CustomerCreateView(FormView):
         return resp
 
 
-class CustomerDeleteView(DeleteView):
+class CustomerDeleteView(PermissionRequiredMixin, DeleteView):
     """DeleteView for deleting the customer."""
 
     template_name = "clients/customers-delete.html"
     queryset = Customer.objects.select_related("lead").select_related("contract")
     success_url = reverse_lazy("clients:customers_list")
+    permission_required = ("clients.delete_customer",)
 
 
+@permission_required("clients.change_customer")
 def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
     """View func for updating the customer."""
     customer = (
@@ -167,6 +179,7 @@ def update_customer(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, "clients/customers-edit.html", context=context)
 
 
+@permission_required("clients.create_customer_from_lead")
 def create_customer_from_lead(request: HttpRequest, lead_pk: int) -> HttpResponse:
     """View func for updating the customer."""
     lead = get_object_or_404(Lead, pk=lead_pk)
