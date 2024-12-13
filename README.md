@@ -14,7 +14,7 @@ A simple CRM system for working with clients. The system allows you to manage th
 ![](demo.gif)
 
 ## Installation
-**To launch the site**, it is enough to deploy a docker container. Before that, you need to create a file.env in the root of the project, following the example specified in .env.example. Next, it is enough to execute the ```docker compose up --build``` command from the root of the project. If the container is running locally, the site is located at http://localhost:8080/.
+**To launch the site**, it is enough to deploy a docker container. Before that, you need to create a file.env in the root of the project, following the example specified in .env.example. Next, it is enough to execute the ```docker compose up --build``` command from the root of the project. If the container is running locally, the site is located at http://127.0.0.1:8080/.
 
 **To download static files for the admin panel**, you need to log into the container with the application (open a new terminal, run the ```docker exec -ti <your-app-container-name> sh``` command - in my case ```docker exec -ti crm-system-app-1 sh```), go to the **/crm/crm** directory (where is the file located **manage.py** ) and execute the command ```python manage.py collectstatic```
 
