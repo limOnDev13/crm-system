@@ -11,13 +11,18 @@ A simple CRM system for working with clients. The system allows you to manage th
 - All roles can view the statistics of advertising campaigns.
 
 ## Visuals
+![](demo.gif)
 
 ## Installation
-To launch the site, it is enough to deploy a docker container. Before that, you need to create a file.env in the root of the project, following the example specified in .env.example. Next, it is enough to execute the ```docker compose up --build``` command from the root of the project. 
+**To launch the site**, it is enough to deploy a docker container. Before that, you need to create a file.env in the root of the project, following the example specified in .env.example. Next, it is enough to execute the ```docker compose up --build``` command from the root of the project.
 
-A superadmin with the **admin** username and password **123** is added to the database. This will allow you to log in to the admin panel (<ins>http://yourhost:yourport/admin/</ins>). Through it, you can add other users and grant them access rights.
+**To download static files for the admin panel**, you need to log into the container with the application (open a new terminal, run the ```docker exec -ti <your-app-container-name> sh``` command - in my case ```docker exec -ti crm-system-app-1 sh```), go to the **/crm/crm** directory (where is the file located **manage.py** ) and execute the command ```python manage.py collectstatic```
 
-The main links of the site:
+**To add an administrator**, you need to go to the **/crm/crm** directory in the container with the application (where the file is located manage.py ) (**see above**) and execute the command ```python manage.py createsuperuser```, then enter the necessary data.
+
+**To create a set of random data (products, advertisements, leads, customers and contracts)**, you need to go to the /crm/crm/ directory (where the file is located manage.py ) (**see above**) and execute the command ```python  manage.py create_random_data```
+
+## Main links
 
 - / - total statistics
 - /products/ - list of services
@@ -26,3 +31,11 @@ The main links of the site:
 - /customers/ - list of customers
 - /accounts/login/ - login
 - /admin/ - admin panel
+
+## Technologies
+
+- Django
+- Postgres
+- Docker
+- Nginx
+- gunicorn
