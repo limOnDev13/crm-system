@@ -1,0 +1,52 @@
+[
+  {
+    "model": "advertising.advertising",
+    "pk": 1,
+    "fields": {
+      "name": "then",
+      "channel": "cell",
+      "budget": "25.52",
+      "product": 18
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 2,
+    "fields": {
+      "name": "physical",
+      "channel": "business",
+      "budget": "15.96",
+      "product": 36
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 3,
+    "fields": {
+      "name": "politics",
+      "channel": "rest",
+      "budget": "17.46",
+      "product": 15
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 4,
+    "fields": {
+      "name": "machine",
+      "channel": "road",
+      "budget": "29.71",
+      "product": 6
+    }
+  },
+  {
+    "model": "advertising.advertising",
+    "pk": 5,
+    "fields": {
+      "name": "create",
+      "channel": "suggest",
+      "budget": "0.18",
+      "product": 25
+    }
+  }
+]
