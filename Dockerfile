@@ -1,8 +1,9 @@
 FROM python:3.12
 
-WORKDIR /crm
+WORKDIR ./crm
 
-ENV PYTHONPATHBUFFERED = 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATHBUFFERED=1
 
 RUN pip install --upgrade pip poetry
 RUN poetry config virtualenvs.create false --local
