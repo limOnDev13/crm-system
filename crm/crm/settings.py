@@ -9,23 +9,30 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from os import getenv
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(encoding='utf-8')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o!9+fvm4_s@dr6!1(m$p9!*+h)jv8_-#&rz#&1&jrm5(5bo19$'
+# SECRET_KEY = 'django-insecure-o!9+fvm4_s@dr6!1(m$p9!*+h)jv8_-#&rz#&1&jrm5(5bo19$'
+SECRET_KEY = getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv("DJANGO_DEBUG", "0") == "1"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+
+] + getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
@@ -37,6 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'myauth.apps.MyauthConfig',
+    'services.apps.ServicesConfig',
+    'advertising.apps.AdvertisingConfig',
+    'clients.apps.ClientsConfig',
+    "contracts.apps.ContractsConfig",
+    "my_statistics.apps.MyStatisticsConfig",
 ]
 
 MIDDLEWARE = [
@@ -54,7 +68,15 @@ ROOT_URLCONF = 'crm.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'crm' / 'templates',
+            BASE_DIR / 'services' / 'templates',
+            BASE_DIR / 'advertising' / 'templates',
+            BASE_DIR / 'clients' / 'templates',
+            BASE_DIR / 'contracts' / 'templates',
+            BASE_DIR / 'myauth' / 'templates',
+            BASE_DIR / 'my_statistics' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,11 +94,16 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+DATABASE_DIR = BASE_DIR / "database"
+DATABASE_DIR.mkdir(exist_ok=True)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('POSTGRES_DB', 'db'),
+        'USER': getenv('POSTGRES_USER', 'user'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD', 'password'),
+        'HOST': getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': getenv('POSTGRES_PORT', 5432),
     }
 }
 
@@ -114,10 +141,38 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
-STATIC_URL = 'static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'upload'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGLEVEL = getenv("DJANGO_LOGLEVEL", "debug").upper()
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "WARNING",
+        },
+    },
+    "root": {
+        "handlers": ["console",],
+        "level": "WARNING",
+    },
+}
+
+LOGIN_REDIRECT_URL = "/"
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8080']
